@@ -1,0 +1,50 @@
+[
+  {
+    "position": "QB",
+    "player_count": 37,
+    "avg_vor": -32.42,
+    "top_player_name": "J.Allen",
+    "top_player_vor": 160.3,
+    "position_cliff_rank": 1
+  },
+  {
+    "position": "RB",
+    "player_count": 99,
+    "avg_vor": -121.07,
+    "top_player_name": "C.McCaffrey",
+    "top_player_vor": 136.6,
+    "position_cliff_rank": 11
+  },
+  {
+    "position": "WR",
+    "player_count": 164,
+    "avg_vor": -124.43,
+    "top_player_name": "P.Nacua",
+    "top_player_vor": 185.2,
+    "position_cliff_rank": 4
+  },
+  {
+    "position": "TE",
+    "player_count": 90,
+    "avg_vor": -66.14,
+    "top_player_name": "T.McBride",
+    "top_player_vor": 148.7,
+    "position_cliff_rank": 1
+  },
+  {
+    "position": "K",
+    "player_count": 33,
+    "avg_vor": null,
+    "top_player_name": "B.Aubrey",
+    "top_player_vor": null,
+    "position_cliff_rank": 1
+  },
+  {
+    "position": "DEF",
+    "player_count": 0,
+    "avg_vor": null,
+    "top_player_name": null,
+    "top_player_vor": null,
+    "position_cliff_rank": null
+  }
+]

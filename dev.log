@@ -1,0 +1,41 @@
+
+> fantasyboard@0.1.0 dev
+> next dev
+
+ ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Projects\package-lock.json as the root directory.
+ To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/output#caveats for more information.
+ Detected additional lockfiles: 
+   * C:\Projects\fantasyboard\package-lock.json
+
+   ▲ Next.js 15.5.18
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.165:3000
+
+ ✓ Starting...
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+
+   We detected TypeScript in your project and reconfigured your tsconfig.json file for you.
+   The following mandatory changes were made to your tsconfig.json:
+
+   	- jsx was set to preserve (next.js implements its own optimized jsx transform)
+
+ ✓ Ready in 2.4s
+ ⚠ Found a change in next.config.ts. Restarting the server to apply the changes...
+   ▲ Next.js 15.5.18
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.165:3000
+
+ ✓ Starting...
+ ✓ Ready in 2.3s
+ ○ Compiling /board ...
+ ✓ Compiled /board in 5.3s (630 modules)
+ GET /board 200 in 5944ms
+ GET /board 200 in 118ms
+ ✓ Compiled /board/[position] in 489ms (632 modules)
+ GET /board/wr 200 in 1538ms
