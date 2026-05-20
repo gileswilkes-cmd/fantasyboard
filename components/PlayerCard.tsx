@@ -1,4 +1,5 @@
 import type { Player } from "@/lib/data";
+import { getCard } from "@/lib/data";
 
 const BORDER = "1px solid #1e2330";
 
@@ -16,11 +17,23 @@ function getVerdict(rank: number): { label: string; bg: string; color: string } 
   return                  { label: "Late round",  bg: "#1e2330", color: "#6b7280" };
 }
 
+function getBadgeStyle(badge: string): { bg: string; color: string } {
+  switch (badge) {
+    case "Draft now":   return { bg: "#0d2d1f", color: "#1D9E75" };
+    case "Strong pick": return { bg: "#185FA5", color: "#5DCAA5" };
+    case "Monitor":     return { bg: "#2a1206", color: "#EF9F27" };
+    case "Late round":  return { bg: "#1e2330", color: "#6b7280" };
+    case "Avoid":       return { bg: "#2d0d0d", color: "#E24B4A" };
+    default:            return { bg: "#1e2330", color: "#6b7280" };
+  }
+}
+
 interface PlayerCardProps {
   player: Player;
 }
 
 export default function PlayerCard({ player }: PlayerCardProps) {
+  const card = getCard(player.player_name);
   const boomPct = player.boom_weeks != null ? Math.round((player.boom_weeks / 16) * 100) : 0;
 
   const statBoxes = [
@@ -35,7 +48,12 @@ export default function PlayerCard({ player }: PlayerCardProps) {
   const numericScores = scores.filter((s): s is number => s !== null);
   const maxScore = numericScores.length ? Math.max(...numericScores) : 1;
 
-  const verdict = getVerdict(player.rank);
+  const fallbackVerdict = getVerdict(player.rank);
+  const verdictBadge = card?.verdict_badge ?? fallbackVerdict.label;
+  const badgeStyle = card ? getBadgeStyle(card.verdict_badge) : { bg: fallbackVerdict.bg, color: fallbackVerdict.color };
+
+  const strengths = card?.strengths ?? ["—", "—", "—"];
+  const weaknesses = card?.weaknesses ?? ["—", "—", "—"];
 
   return (
     <div style={{ background: "#0d1f1a", borderLeft: "2px solid #1D9E75" }}>
@@ -43,11 +61,14 @@ export default function PlayerCard({ player }: PlayerCardProps) {
       {/* 1. One-liner */}
       <div style={{ padding: "10px 14px", borderBottom: BORDER }}>
         <span style={{ fontStyle: "italic", color: "#1D9E75", fontSize: 13 }}>
-          2025 avg {player.avg_ppr_2025?.toFixed(1) ?? "—"} pts · {player.boom_weeks ?? 0} boom weeks · std dev {player.std_dev?.toFixed(1) ?? "—"} · {player.bust_weeks ?? 0} bust weeks
+          {card
+            ? card.one_liner
+            : `2025 avg ${player.avg_ppr_2025?.toFixed(1) ?? "—"} pts · ${player.boom_weeks ?? 0} boom weeks · std dev ${player.std_dev?.toFixed(1) ?? "—"} · ${player.bust_weeks ?? 0} bust weeks`
+          }
         </span>
       </div>
 
-      {/* 2. Five stat boxes */}
+      {/* 2. Five stat boxes — unchanged, always live data */}
       <div style={{ display: "flex", borderBottom: BORDER }}>
         {statBoxes.map((box, i) => (
           <div
@@ -88,10 +109,10 @@ export default function PlayerCard({ player }: PlayerCardProps) {
           }}>
             Strengths
           </div>
-          {[0, 1, 2].map((i) => (
-            <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: i < 2 ? 6 : 0 }}>
-              <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#1D9E75", flexShrink: 0 }} />
-              <span style={{ fontSize: 12, color: "#4b5563" }}>Full analysis generated in Session 5</span>
+          {strengths.slice(0, 3).map((s, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: i < 2 ? 6 : 0 }}>
+              <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#1D9E75", flexShrink: 0, marginTop: 5 }} />
+              <span style={{ fontSize: 12, color: card ? "#9ca3af" : "#4b5563" }}>{s}</span>
             </div>
           ))}
         </div>
@@ -106,10 +127,10 @@ export default function PlayerCard({ player }: PlayerCardProps) {
           }}>
             Weaknesses
           </div>
-          {[0, 1, 2].map((i) => (
-            <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: i < 2 ? 6 : 0 }}>
-              <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#E24B4A", flexShrink: 0 }} />
-              <span style={{ fontSize: 12, color: "#4b5563" }}>Full analysis generated in Session 5</span>
+          {weaknesses.slice(0, 3).map((w, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: i < 2 ? 6 : 0 }}>
+              <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#E24B4A", flexShrink: 0, marginTop: 5 }} />
+              <span style={{ fontSize: 12, color: card ? "#9ca3af" : "#4b5563" }}>{w}</span>
             </div>
           ))}
         </div>
@@ -128,11 +149,12 @@ export default function PlayerCard({ player }: PlayerCardProps) {
           }}>
             Comp
           </div>
-          <span style={{ fontSize: 12, color: "#4b5563" }}>
-            Historical comp generated in Session 5
+          <span style={{ fontSize: 12, color: card ? "#9ca3af" : "#4b5563" }}>
+            {card ? card.comp : "Historical comp generated in Session 5"}
           </span>
         </div>
         <div style={{ padding: "12px 14px" }}>
+          {/* Sparkline — always live data */}
           <svg
             width="100%"
             height={CHART_H}
@@ -140,9 +162,7 @@ export default function PlayerCard({ player }: PlayerCardProps) {
             preserveAspectRatio="none"
             style={{ display: "block" }}
           >
-            {/* Baseline */}
             <rect x={0} y={CHART_H - 1} width={CHART_W} height={1} fill="#1e2330" />
-            {/* Bars */}
             {scores.map((score, i) => {
               if (score === null) return null;
               const barH = Math.max(3, (score / maxScore) * (CHART_H - 2));
@@ -170,14 +190,17 @@ export default function PlayerCard({ player }: PlayerCardProps) {
           borderRadius: 4,
           fontSize: 12,
           fontWeight: 600,
-          background: verdict.bg,
-          color: verdict.color,
+          background: badgeStyle.bg,
+          color: badgeStyle.color,
           flexShrink: 0,
         }}>
-          {verdict.label}
+          {verdictBadge}
         </span>
         <span style={{ fontSize: 12, color: "#4b5563" }}>
-          Pick {player.rank} overall · Proj {player.projected_pts.toFixed(0)} pts · ADP {player.adp_rank ?? "—"}
+          {card
+            ? card.verdict_text
+            : `Pick ${player.rank} overall · Proj ${player.projected_pts.toFixed(0)} pts · ADP ${player.adp_rank ?? "—"}`
+          }
         </span>
       </div>
 

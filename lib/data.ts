@@ -1,5 +1,6 @@
 import playersData from "@/data/players.json";
 import positionsSummaryData from "@/data/positions_summary.json";
+import cardsJson from "@/data/cards.json";
 
 export interface Player {
   rank: number;
@@ -48,6 +49,20 @@ export function getPositionSummary(position: string): PositionSummary | undefine
 
 export function getAllPositionsSummary(): PositionSummary[] {
   return positionsSummaryData as unknown as PositionSummary[];
+}
+
+export interface PlayerCard {
+  one_liner: string;
+  strengths: string[];
+  weaknesses: string[];
+  comp: string;
+  verdict_badge: string;
+  verdict_text: string;
+}
+
+export function getCard(playerName: string): PlayerCard | null {
+  const map = cardsJson as unknown as Record<string, PlayerCard>;
+  return map[playerName] ?? null;
 }
 
 export function searchPlayers(query: string, players: Player[]): Player[] {
