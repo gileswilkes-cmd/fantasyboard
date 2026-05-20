@@ -1,156 +1,186 @@
 import type { Player } from "@/lib/data";
 
-const VERDICT_CONFIG = {
-  "Draft now": { bg: "var(--teal-bg)", color: "var(--teal)", border: "var(--teal-dim)" },
-  "Wait":       { bg: "var(--amber-tag-bg)", color: "var(--amber-tag)", border: "var(--amber-tag)" },
-  "Monitor":    { bg: "var(--bg-card)", color: "var(--text-secondary)", border: "var(--border)" },
-  "Avoid":      { bg: "var(--red-bg)", color: "var(--red)", border: "var(--red)" },
-} as const;
+const BORDER = "1px solid #1e2330";
 
-type Verdict = keyof typeof VERDICT_CONFIG;
+const CHART_H = 52;
+const BAR_W = 14;
+const BAR_GAP = 2;
+const TOTAL_BARS = 18;
+// 18 bars × 14px + 17 gaps × 2px = 286
+const CHART_W = TOTAL_BARS * BAR_W + (TOTAL_BARS - 1) * BAR_GAP;
 
-function getVerdict(player: Player): Verdict {
-  if (player.risk_flag) return "Avoid";
-  if (player.value_delta != null && player.value_delta > 10) return "Draft now";
-  if (player.value_delta != null && player.value_delta >= 0) return "Wait";
-  return "Monitor";
+function getVerdict(rank: number): { label: string; bg: string; color: string } {
+  if (rank <= 10)  return { label: "Draft now",   bg: "#0d2d1f", color: "#1D9E75" };
+  if (rank <= 50)  return { label: "Strong pick", bg: "#185FA5", color: "#5DCAA5" };
+  if (rank <= 150) return { label: "Monitor",     bg: "#2a1206", color: "#EF9F27" };
+  return                  { label: "Late round",  bg: "#1e2330", color: "#6b7280" };
 }
 
 interface PlayerCardProps {
   player: Player;
 }
 
-const WEEK_COUNT = 18;
-const BAR_W = 14;
-const GAP = 2;
-const CHART_H = 48;
-const TOTAL_W = WEEK_COUNT * (BAR_W + GAP);
-
 export default function PlayerCard({ player }: PlayerCardProps) {
-  const verdict = getVerdict(player);
-  const vs = VERDICT_CONFIG[verdict];
-
-  const boomPct =
-    player.boom_weeks != null ? Math.round((player.boom_weeks / 16) * 100) : 0;
+  const boomPct = player.boom_weeks != null ? Math.round((player.boom_weeks / 16) * 100) : 0;
 
   const statBoxes = [
-    { label: "Avg PPR",  value: player.avg_ppr_2025?.toFixed(1) ?? "—" },
-    { label: "Median",   value: player.avg_ppr_2025?.toFixed(1) ?? "—" },
-    { label: "Boom%",    value: `${boomPct}%` },
-    { label: "Std Dev",  value: player.std_dev?.toFixed(1) ?? "—" },
-    { label: "Bust Wks", value: String(player.bust_weeks ?? "—") },
+    { label: "Avg PPR",    value: player.avg_ppr_2025?.toFixed(1) ?? "—" },
+    { label: "2024 Avg",   value: player.avg_ppr_2024?.toFixed(1) ?? "—" },
+    { label: "Boom %",     value: `${boomPct}%` },
+    { label: "Std Dev",    value: player.std_dev?.toFixed(1) ?? "—" },
+    { label: "Bust Weeks", value: String(player.bust_weeks ?? "—") },
   ];
 
-  const scores = player.weekly_scores.slice(0, WEEK_COUNT);
+  const scores = player.weekly_scores.slice(0, TOTAL_BARS);
   const numericScores = scores.filter((s): s is number => s !== null);
   const maxScore = numericScores.length ? Math.max(...numericScores) : 1;
 
-  return (
-    <div
-      style={{
-        background: "#0d1f1a",
-        borderLeft: "2px solid var(--teal)",
-        padding: 16,
-      }}
-    >
-      {/* One-liner */}
-      <p style={{ fontStyle: "italic", color: "var(--teal)", fontSize: 13, marginBottom: 12 }}>
-        2025 avg: {player.avg_ppr_2025?.toFixed(1) ?? "—"} pts/game · {player.boom_weeks ?? 0} boom weeks · std dev {player.std_dev?.toFixed(1) ?? "—"}
-      </p>
+  const verdict = getVerdict(player.rank);
 
-      {/* Stat boxes */}
-      <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-        {statBoxes.map(({ label, value }) => (
+  return (
+    <div style={{ background: "#0d1f1a", borderLeft: "2px solid #1D9E75" }}>
+
+      {/* 1. One-liner */}
+      <div style={{ padding: "10px 14px", borderBottom: BORDER }}>
+        <span style={{ fontStyle: "italic", color: "#1D9E75", fontSize: 13 }}>
+          2025 avg {player.avg_ppr_2025?.toFixed(1) ?? "—"} pts · {player.boom_weeks ?? 0} boom weeks · std dev {player.std_dev?.toFixed(1) ?? "—"} · {player.bust_weeks ?? 0} bust weeks
+        </span>
+      </div>
+
+      {/* 2. Five stat boxes */}
+      <div style={{ display: "flex", borderBottom: BORDER }}>
+        {statBoxes.map((box, i) => (
           <div
-            key={label}
+            key={box.label}
             style={{
               flex: 1,
-              background: "var(--bg-secondary)",
-              borderRadius: 6,
-              padding: "8px 10px",
+              padding: "12px 8px",
               textAlign: "center",
+              borderRight: i < statBoxes.length - 1 ? BORDER : "none",
             }}
           >
-            <div style={{ fontSize: 15, fontWeight: 600, color: "var(--text-primary)" }}>
-              {value}
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#e8eaf0" }}>
+              {box.value}
             </div>
-            <div style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 2, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-              {label}
+            <div style={{
+              fontSize: 10,
+              color: "#4b5563",
+              textTransform: "uppercase",
+              letterSpacing: "0.06em",
+              marginTop: 4,
+            }}>
+              {box.label}
             </div>
           </div>
         ))}
       </div>
 
-      {/* Strengths / Weaknesses */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
-        <div>
-          <div style={{ fontSize: 10, fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 6 }}>
+      {/* 3. Strengths / Weaknesses */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderBottom: BORDER }}>
+        <div style={{ padding: "12px 14px", borderRight: BORDER }}>
+          <div style={{
+            fontSize: 10,
+            fontWeight: 600,
+            color: "#1D9E75",
+            textTransform: "uppercase",
+            letterSpacing: "0.06em",
+            marginBottom: 8,
+          }}>
             Strengths
           </div>
-          <div style={{ fontSize: 12, color: "var(--text-muted)", fontStyle: "italic" }}>
-            Strengths will be generated
-          </div>
+          {[0, 1, 2].map((i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: i < 2 ? 6 : 0 }}>
+              <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#1D9E75", flexShrink: 0 }} />
+              <span style={{ fontSize: 12, color: "#4b5563" }}>Full analysis generated in Session 5</span>
+            </div>
+          ))}
         </div>
-        <div>
-          <div style={{ fontSize: 10, fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 6 }}>
+        <div style={{ padding: "12px 14px" }}>
+          <div style={{
+            fontSize: 10,
+            fontWeight: 600,
+            color: "#E24B4A",
+            textTransform: "uppercase",
+            letterSpacing: "0.06em",
+            marginBottom: 8,
+          }}>
             Weaknesses
           </div>
-          <div style={{ fontSize: 12, color: "var(--text-muted)", fontStyle: "italic" }}>
-            Weaknesses will be generated
-          </div>
+          {[0, 1, 2].map((i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: i < 2 ? 6 : 0 }}>
+              <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#E24B4A", flexShrink: 0 }} />
+              <span style={{ fontSize: 12, color: "#4b5563" }}>Full analysis generated in Session 5</span>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Sparkline */}
-      <div style={{ marginBottom: 16 }}>
-        <div style={{ fontSize: 10, fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 6 }}>
-          Weekly Scores
-        </div>
-        <svg
-          width="100%"
-          height={CHART_H}
-          viewBox={`0 0 ${TOTAL_W} ${CHART_H}`}
-          preserveAspectRatio="none"
-          style={{ display: "block" }}
-        >
-          {scores.map((score, i) => {
-            if (score === null) return null;
-            const barH = Math.max(4, (score / maxScore) * CHART_H);
-            const color = score >= 20 ? "#378ADD" : score < 10 ? "#E24B4A" : "#1e2330";
-            return (
-              <rect
-                key={i}
-                x={i * (BAR_W + GAP)}
-                y={CHART_H - barH}
-                width={BAR_W}
-                height={barH}
-                fill={color}
-                rx={1}
-              />
-            );
-          })}
-        </svg>
-      </div>
-
-      {/* Verdict row */}
-      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-        <span
-          style={{
-            padding: "4px 10px",
-            borderRadius: 4,
-            fontSize: 12,
+      {/* 4. Bottom row: Comp + Sparkline */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderBottom: BORDER }}>
+        <div style={{ padding: "12px 14px", borderRight: BORDER }}>
+          <div style={{
+            fontSize: 10,
             fontWeight: 600,
-            background: vs.bg,
-            color: vs.color,
-            border: `1px solid ${vs.border}`,
-          }}
-        >
-          {verdict}
+            color: "#4b5563",
+            textTransform: "uppercase",
+            letterSpacing: "0.06em",
+            marginBottom: 6,
+          }}>
+            Comp
+          </div>
+          <span style={{ fontSize: 12, color: "#4b5563" }}>
+            Historical comp generated in Session 5
+          </span>
+        </div>
+        <div style={{ padding: "12px 14px" }}>
+          <svg
+            width="100%"
+            height={CHART_H}
+            viewBox={`0 0 ${CHART_W} ${CHART_H}`}
+            preserveAspectRatio="none"
+            style={{ display: "block" }}
+          >
+            {/* Baseline */}
+            <rect x={0} y={CHART_H - 1} width={CHART_W} height={1} fill="#1e2330" />
+            {/* Bars */}
+            {scores.map((score, i) => {
+              if (score === null) return null;
+              const barH = Math.max(3, (score / maxScore) * (CHART_H - 2));
+              const color = score >= 20 ? "#378ADD" : score < 10 ? "#E24B4A" : "#2a3a4a";
+              return (
+                <rect
+                  key={i}
+                  x={i * (BAR_W + BAR_GAP)}
+                  y={CHART_H - 1 - barH}
+                  width={BAR_W}
+                  height={barH}
+                  fill={color}
+                  rx={1}
+                />
+              );
+            })}
+          </svg>
+        </div>
+      </div>
+
+      {/* 5. Verdict row */}
+      <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 14px" }}>
+        <span style={{
+          padding: "4px 10px",
+          borderRadius: 4,
+          fontSize: 12,
+          fontWeight: 600,
+          background: verdict.bg,
+          color: verdict.color,
+          flexShrink: 0,
+        }}>
+          {verdict.label}
         </span>
-        <span style={{ fontSize: 12, color: "var(--text-muted)", fontStyle: "italic" }}>
-          Full analysis coming — AI cards generate in Session 5
+        <span style={{ fontSize: 12, color: "#4b5563" }}>
+          Pick {player.rank} overall · Proj {player.projected_pts.toFixed(0)} pts · ADP {player.adp_rank ?? "—"}
         </span>
       </div>
+
     </div>
   );
 }
