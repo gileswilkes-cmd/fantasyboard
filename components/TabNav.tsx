@@ -3,13 +3,15 @@
 import Link from "next/link";
 
 const TABS = [
-  { label: "All", href: "/board", key: "all" },
-  { label: "QB", href: "/board/qb", key: "qb" },
-  { label: "RB", href: "/board/rb", key: "rb" },
-  { label: "WR", href: "/board/wr", key: "wr" },
-  { label: "TE", href: "/board/te", key: "te" },
-  { label: "K", href: "/board/k", key: "k" },
-  { label: "DEF", href: "/board/def", key: "def" },
+  { label: "All",         href: "/board",       key: "all" },
+  { label: "QB",          href: "/board/qb",    key: "qb" },
+  { label: "RB",          href: "/board/rb",    key: "rb" },
+  { label: "WR",          href: "/board/wr",    key: "wr" },
+  { label: "TE",          href: "/board/te",    key: "te" },
+  { label: "K",           href: "/board/k",     key: "k" },
+  { label: "DEF",         href: "/board/def",   key: "def" },
+  { label: "Think Board", href: "/think-board", key: "think-board" },
+  { label: "Draft Room",  href: "/draft-room",  key: "draft-room" },
 ];
 
 interface TabNavProps {
@@ -29,6 +31,7 @@ export default function TabNav({ position }: TabNavProps) {
       padding: "0 24px",
       gap: 4,
       flexShrink: 0,
+      overflowX: "auto",
     }}>
       {TABS.map((tab) => {
         const isActive = active === tab.key;
@@ -46,6 +49,7 @@ export default function TabNav({ position }: TabNavProps) {
               borderBottom: isActive ? "2px solid var(--teal)" : "2px solid transparent",
               textDecoration: "none",
               transition: "color 0.15s",
+              whiteSpace: "nowrap",
             }}
           >
             {tab.label}

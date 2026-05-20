@@ -39,3 +39,20 @@ https://nextjs.org/telemetry
  GET /board 200 in 118ms
  ✓ Compiled /board/[position] in 489ms (632 modules)
  GET /board/wr 200 in 1538ms
+ ✓ Compiled in 317ms (239 modules)
+ ✓ Compiled in 157ms (239 modules)
+ ✓ Compiled in 307ms (239 modules)
+ ✓ Compiled in 165ms (239 modules)
+ ✓ Compiled in 494ms (239 modules)
+ ✓ Compiled in 154ms (239 modules)
+ ✓ Compiled in 124ms (239 modules)
+ ✓ Compiled in 162ms (239 modules)
+ ✓ Compiled in 125ms (239 modules)
+ ✓ Compiled in 139ms (239 modules)
+ ✓ Compiled in 145ms (239 modules)
+ ✓ Compiled in 552ms (239 modules)
+ ✓ Compiled in 150ms (239 modules)
+   Reload env: .env.local
+ ✓ Compiled in 198ms (239 modules)
+   Reload env: .env.local
+ ✓ Compiled in 176ms (225 modules)
