@@ -1,5 +1,15 @@
+"use client";
+
 import type { Player } from "@/lib/data";
 import { getCard } from "@/lib/data";
+import NflLogo from "./NflLogo";
+
+const POSITION_TAGS: Record<string, { color: string; bg: string }> = {
+  WR: { color: "var(--teal)",        bg: "var(--teal-bg)" },
+  RB: { color: "var(--green-tag)",   bg: "var(--green-tag-bg)" },
+  QB: { color: "var(--amber-tag)",   bg: "var(--amber-tag-bg)" },
+  TE: { color: "var(--amber-light)", bg: "var(--amber-tag-bg2)" },
+};
 
 const BORDER = "1px solid #1e2330";
 
@@ -33,6 +43,7 @@ interface PlayerCardProps {
 }
 
 export default function PlayerCard({ player }: PlayerCardProps) {
+  const posTag = POSITION_TAGS[player.position] ?? { color: "var(--text-secondary)", bg: "var(--bg-card)" };
   const card = getCard(player.player_name);
   const boomPct = player.boom_weeks != null ? Math.round((player.boom_weeks / 16) * 100) : 0;
 
@@ -57,6 +68,27 @@ export default function PlayerCard({ player }: PlayerCardProps) {
 
   return (
     <div style={{ background: "#0d1f1a", borderLeft: "2px solid #1D9E75" }}>
+
+      {/* 0. Header: logo + player name + position + team */}
+      <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", borderBottom: BORDER }}>
+        <NflLogo team={player.team} size={32} />
+        <div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+            <span style={{ fontSize: 16, fontWeight: 700, color: "#e8eaf0" }}>
+              {player.player_name}
+            </span>
+            <span style={{
+              fontSize: 11, fontWeight: 600, padding: "2px 5px", borderRadius: 3,
+              color: posTag.color, background: posTag.bg,
+            }}>
+              {player.position}
+            </span>
+          </div>
+          <div style={{ fontSize: 12, color: "#9ca3af", fontWeight: 500, marginTop: 3 }}>
+            {player.team}
+          </div>
+        </div>
+      </div>
 
       {/* 1. One-liner */}
       <div style={{ padding: "10px 14px", borderBottom: BORDER }}>
@@ -84,7 +116,7 @@ export default function PlayerCard({ player }: PlayerCardProps) {
               {box.value}
             </div>
             <div style={{
-              fontSize: 10,
+              fontSize: 11,
               color: "#4b5563",
               textTransform: "uppercase",
               letterSpacing: "0.06em",
@@ -100,7 +132,7 @@ export default function PlayerCard({ player }: PlayerCardProps) {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderBottom: BORDER }}>
         <div style={{ padding: "12px 14px", borderRight: BORDER }}>
           <div style={{
-            fontSize: 10,
+            fontSize: 11,
             fontWeight: 600,
             color: "#1D9E75",
             textTransform: "uppercase",
@@ -112,13 +144,13 @@ export default function PlayerCard({ player }: PlayerCardProps) {
           {strengths.slice(0, 3).map((s, i) => (
             <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: i < 2 ? 6 : 0 }}>
               <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#1D9E75", flexShrink: 0, marginTop: 5 }} />
-              <span style={{ fontSize: 12, color: card ? "#9ca3af" : "#4b5563" }}>{s}</span>
+              <span style={{ fontSize: 13, color: card ? "#9ca3af" : "#4b5563" }}>{s}</span>
             </div>
           ))}
         </div>
         <div style={{ padding: "12px 14px" }}>
           <div style={{
-            fontSize: 10,
+            fontSize: 11,
             fontWeight: 600,
             color: "#E24B4A",
             textTransform: "uppercase",
@@ -130,7 +162,7 @@ export default function PlayerCard({ player }: PlayerCardProps) {
           {weaknesses.slice(0, 3).map((w, i) => (
             <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: i < 2 ? 6 : 0 }}>
               <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#E24B4A", flexShrink: 0, marginTop: 5 }} />
-              <span style={{ fontSize: 12, color: card ? "#9ca3af" : "#4b5563" }}>{w}</span>
+              <span style={{ fontSize: 13, color: card ? "#9ca3af" : "#4b5563" }}>{w}</span>
             </div>
           ))}
         </div>
@@ -140,7 +172,7 @@ export default function PlayerCard({ player }: PlayerCardProps) {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderBottom: BORDER }}>
         <div style={{ padding: "12px 14px", borderRight: BORDER }}>
           <div style={{
-            fontSize: 10,
+            fontSize: 11,
             fontWeight: 600,
             color: "#4b5563",
             textTransform: "uppercase",
@@ -149,7 +181,7 @@ export default function PlayerCard({ player }: PlayerCardProps) {
           }}>
             Comp
           </div>
-          <span style={{ fontSize: 12, color: card ? "#9ca3af" : "#4b5563" }}>
+          <span style={{ fontSize: 13, color: card ? "#9ca3af" : "#4b5563" }}>
             {card ? card.comp : "Historical comp generated in Session 5"}
           </span>
         </div>
@@ -188,7 +220,7 @@ export default function PlayerCard({ player }: PlayerCardProps) {
         <span style={{
           padding: "4px 10px",
           borderRadius: 4,
-          fontSize: 12,
+          fontSize: 13,
           fontWeight: 600,
           background: badgeStyle.bg,
           color: badgeStyle.color,
@@ -196,7 +228,7 @@ export default function PlayerCard({ player }: PlayerCardProps) {
         }}>
           {verdictBadge}
         </span>
-        <span style={{ fontSize: 12, color: "#4b5563" }}>
+        <span style={{ fontSize: 13, color: "#4b5563" }}>
           {card
             ? card.verdict_text
             : `Pick ${player.rank} overall · Proj ${player.projected_pts.toFixed(0)} pts · ADP ${player.adp_rank ?? "—"}`

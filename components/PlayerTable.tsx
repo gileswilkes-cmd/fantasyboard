@@ -4,6 +4,7 @@ import { Fragment, useState, useEffect } from "react";
 import type { Player } from "@/lib/data";
 import PlayerCard from "./PlayerCard";
 import { getTier, getTierConfig } from "@/lib/tiers";
+import NflLogo from "./NflLogo";
 
 interface PlayerTableProps {
   players: Player[];
@@ -48,10 +49,10 @@ function TierDividerRow({ tier, colSpan }: { tier: number; colSpan: number }) {
       <td colSpan={colSpan} style={{ padding: "5px 16px", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span style={{ color: config.color, fontSize: 15, lineHeight: 1 }}>{config.icon}</span>
-          <span style={{ color: config.color, fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}>
+          <span style={{ color: config.color, fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}>
             {config.label}
           </span>
-          <span style={{ color: "var(--text-muted)", fontSize: 10 }}>— {config.description}</span>
+          <span style={{ color: "var(--text-muted)", fontSize: 11 }}>— {config.description}</span>
         </div>
       </td>
     </tr>
@@ -137,7 +138,7 @@ export default function PlayerTable({ players }: PlayerTableProps) {
                 onClick={() => handleSort(col.key)}
                 style={{
                   padding: "10px 16px",
-                  fontSize: 10,
+                  fontSize: 11,
                   fontWeight: 600,
                   color: col.key === sortKey ? "var(--teal)" : "var(--text-muted)",
                   textTransform: "uppercase",
@@ -190,7 +191,7 @@ export default function PlayerTable({ players }: PlayerTableProps) {
                         background: "none",
                         border: "none",
                         cursor: "pointer",
-                        fontSize: 13,
+                        fontSize: 14,
                         color: isStarred ? "#EF9F27" : "var(--text-muted)",
                         padding: 0,
                         lineHeight: 1,
@@ -202,7 +203,7 @@ export default function PlayerTable({ players }: PlayerTableProps) {
 
                   {/* Rank */}
                   <td style={{ padding: "9px 16px", textAlign: "center", width: 44 }}>
-                    <span style={{ color: "var(--teal)", fontWeight: 600, fontSize: 13 }}>
+                    <span style={{ color: "var(--teal)", fontWeight: 600, fontSize: 15 }}>
                       {player.rank}
                     </span>
                   </td>
@@ -210,44 +211,49 @@ export default function PlayerTable({ players }: PlayerTableProps) {
                   {/* Player */}
                   <td style={{ padding: "9px 16px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                      <span style={{ color: "var(--text-primary)", fontSize: 13, fontWeight: 700 }}>
-                        {player.player_name}
-                      </span>
-                      <span
-                        style={{
-                          fontSize: 10,
-                          fontWeight: 600,
-                          padding: "2px 5px",
-                          borderRadius: 3,
-                          color: tag.color,
-                          background: tag.bg,
-                        }}
-                      >
-                        {player.position}
-                      </span>
-                    </div>
-                    <div style={{ fontSize: 11, color: "var(--text-secondary)", marginTop: 2 }}>
-                      {player.team}
+                      <NflLogo team={player.team} size={24} />
+                      <div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                          <span style={{ color: "var(--text-primary)", fontSize: 15, fontWeight: 700 }}>
+                            {player.player_name}
+                          </span>
+                          <span
+                            style={{
+                              fontSize: 11,
+                              fontWeight: 600,
+                              padding: "2px 5px",
+                              borderRadius: 3,
+                              color: tag.color,
+                              background: tag.bg,
+                            }}
+                          >
+                            {player.position}
+                          </span>
+                        </div>
+                        <div style={{ fontSize: 12, color: "#9ca3af", fontWeight: 500, marginTop: 2 }}>
+                          {player.team}
+                        </div>
+                      </div>
                     </div>
                   </td>
 
                   {/* VOR */}
                   <td style={{ padding: "9px 16px", textAlign: "right" }}>
-                    <span style={{ color: "var(--text-primary)", fontSize: 12 }}>
+                    <span style={{ color: "var(--text-primary)", fontSize: 14 }}>
                       {player.vor_score?.toFixed(1) ?? "—"}
                     </span>
                   </td>
 
                   {/* Proj Pts */}
                   <td style={{ padding: "9px 16px", textAlign: "right" }}>
-                    <span style={{ color: "var(--text-primary)", fontSize: 12 }}>
+                    <span style={{ color: "var(--text-primary)", fontSize: 14 }}>
                       {player.projected_pts?.toFixed(1) ?? "—"}
                     </span>
                   </td>
 
                   {/* ADP */}
                   <td style={{ padding: "9px 16px", textAlign: "right" }}>
-                    <span style={{ color: "var(--text-muted)", fontSize: 12 }}>
+                    <span style={{ color: "var(--text-muted)", fontSize: 14 }}>
                       {player.adp != null ? player.adp.toFixed(1) : "—"}
                     </span>
                   </td>
@@ -255,17 +261,17 @@ export default function PlayerTable({ players }: PlayerTableProps) {
                   {/* Value */}
                   <td style={{ padding: "9px 16px", textAlign: "right" }}>
                     {player.value_delta == null || player.value_delta === 0 ? (
-                      <span style={{ color: "var(--text-muted)", fontSize: 12 }}>—</span>
+                      <span style={{ color: "var(--text-muted)", fontSize: 14 }}>—</span>
                     ) : player.value_delta > 0 ? (
-                      <span style={{ color: "#4ade80", fontSize: 12 }}>↑ {player.value_delta}</span>
+                      <span style={{ color: "#4ade80", fontSize: 14 }}>↑ {player.value_delta}</span>
                     ) : (
-                      <span style={{ color: "var(--red)", fontSize: 12 }}>↓ {Math.abs(player.value_delta)}</span>
+                      <span style={{ color: "var(--red)", fontSize: 14 }}>↓ {Math.abs(player.value_delta)}</span>
                     )}
                   </td>
 
                   {/* Avg PPR */}
                   <td style={{ padding: "9px 16px", textAlign: "right" }}>
-                    <span style={{ color: "var(--text-primary)", fontSize: 12 }}>
+                    <span style={{ color: "var(--text-primary)", fontSize: 14 }}>
                       {player.avg_ppr_2025?.toFixed(1) ?? "—"}
                     </span>
                   </td>
