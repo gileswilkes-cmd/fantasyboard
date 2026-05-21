@@ -8,7 +8,23 @@ import { getTier, getTierConfig } from "@/lib/tiers";
 
 const NUM_TEAMS = 14;
 
-// ─── Snake-draft helpers ────────────────────────────────────────────────────
+// ─── Position roster limits (full draft) ─────────────────────────────────────
+
+const POS_LIMITS: Record<string, number> = {
+  QB: 2, RB: 6, WR: 6, TE: 3, K: 1, DEF: 1,
+};
+
+// ─── Saved draft state shape ──────────────────────────────────────────────────
+
+interface SavedDraftState {
+  picks: (Player | null)[];
+  currentPickIndex: number;
+  userSlot: number;
+  totalRounds: number;
+  phase: "drafting" | "report";
+}
+
+// ─── Snake-draft helpers ──────────────────────────────────────────────────────
 
 function getTeamSlot(pickIndex: number): number {
   const round = Math.floor(pickIndex / NUM_TEAMS) + 1;
@@ -43,7 +59,7 @@ function bestBy<K extends keyof Player>(
   });
 }
 
-// ─── Bot personalities ────────────────────────────────────────────────────
+// ─── Bot personalities ────────────────────────────────────────────────────────
 
 interface Bot {
   name: string;
@@ -165,7 +181,7 @@ const BOT_PERSONALITIES: Bot[] = [
   },
 ];
 
-// ─── Roster slot helpers ─────────────────────────────────────────────────
+// ─── Roster slot helpers ──────────────────────────────────────────────────────
 
 const ROSTER_SLOTS = [
   { id: "QB",   label: "QB",      starter: true  },
@@ -213,7 +229,7 @@ function assignToSlots(playerList: Player[]): RosterState {
   return roster;
 }
 
-// ─── UI constants ─────────────────────────────────────────────────────────
+// ─── UI constants ─────────────────────────────────────────────────────────────
 
 const POS_COLORS: Record<string, string> = {
   QB: "var(--amber-tag)",
@@ -233,7 +249,7 @@ const POS_BG: Record<string, string> = {
   DEF:"var(--bg-secondary)",
 };
 
-// ─── Main component ────────────────────────────────────────────────────────
+// ─── Main component ───────────────────────────────────────────────────────────
 
 export default function DraftRoomPage() {
   const allPlayers = useMemo(() => getPlayers(), []);
@@ -249,6 +265,9 @@ export default function DraftRoomPage() {
   const [currentPickIndex, setCurrentPickIndex] = useState(0);
   const [toast, setToast] = useState<{ id: number; text: string } | null>(null);
 
+  // Saved draft resume
+  const [savedDraftData, setSavedDraftData] = useState<SavedDraftState | null>(null);
+
   // Report
   const [assessment, setAssessment] = useState<string | null>(null);
   const [assessmentLoading, setAssessmentLoading] = useState(false);
@@ -262,7 +281,42 @@ export default function DraftRoomPage() {
     stateRef.current = { picks, currentPickIndex, userSlot, totalRounds, phase };
   });
 
-  // ── Toast auto-dismiss ──────────────────────────────────────────────────
+  // ── Load saved draft on mount ────────────────────────────────────────────
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("ff_draft_state");
+      if (saved) {
+        const data: SavedDraftState = JSON.parse(saved);
+        if ((data.phase === "drafting" || data.phase === "report") && Array.isArray(data.picks)) {
+          setSavedDraftData(data);
+        }
+      }
+    } catch { /* ignore */ }
+  }, []);
+
+  // ── Persist draft state on every pick ───────────────────────────────────
+  useEffect(() => {
+    if (phase !== "drafting" && phase !== "report") return;
+    try {
+      localStorage.setItem("ff_draft_state", JSON.stringify({
+        picks, currentPickIndex, userSlot, totalRounds, phase,
+      }));
+    } catch { /* ignore */ }
+  }, [picks, currentPickIndex, phase, userSlot, totalRounds]);
+
+  // ── Increment draft counter when a draft session completes ───────────────
+  const prevPhaseRef = useRef<string>("setup");
+  useEffect(() => {
+    if (phase === "report" && prevPhaseRef.current === "drafting") {
+      try {
+        const n = Number(localStorage.getItem("ff_drafts_run") ?? "0");
+        localStorage.setItem("ff_drafts_run", String(n + 1));
+      } catch { /* ignore */ }
+    }
+    prevPhaseRef.current = phase;
+  }, [phase]);
+
+  // ── Toast auto-dismiss ───────────────────────────────────────────────────
   const toastId = toast?.id;
   useEffect(() => {
     if (!toastId) return;
@@ -270,7 +324,7 @@ export default function DraftRoomPage() {
     return () => clearTimeout(t);
   }, [toastId]);
 
-  // ── Bot turn engine ─────────────────────────────────────────────────────
+  // ── Bot turn engine ──────────────────────────────────────────────────────
   const isUserTurn =
     phase === "drafting" &&
     currentPickIndex < totalRounds * NUM_TEAMS &&
@@ -296,13 +350,24 @@ export default function DraftRoomPage() {
       const botIdx = getBotIndex(slot, us);
       const personality = BOT_PERSONALITIES[botIdx];
 
+      // Build bot's current roster
       const botRoster: Player[] = [];
       for (let i = 0; i < idx; i++) {
         if (getTeamSlot(i) === slot && p[i]) botRoster.push(p[i]!);
       }
 
+      // Filter available players by this bot's position limits
+      const botPosCounts: Record<string, number> = {};
+      botRoster.forEach((pl) => {
+        botPosCounts[pl.position] = (botPosCounts[pl.position] ?? 0) + 1;
+      });
+      const availableForBot = available.filter(
+        (pl) => (botPosCounts[pl.position] ?? 0) < (POS_LIMITS[pl.position] ?? 999)
+      );
+      const botPool = availableForBot.length > 0 ? availableForBot : available;
+
       const round = Math.floor(idx / NUM_TEAMS) + 1;
-      const botPick = personality.pick(available, botRoster, round);
+      const botPick = personality.pick(botPool, botRoster, round);
 
       const nextIdx = idx + 1;
       setPicks((prev) => {
@@ -319,11 +384,11 @@ export default function DraftRoomPage() {
     return () => clearTimeout(timer);
   }, [currentPickIndex, phase, userSlot, totalRounds, allPlayers]);
 
-  // ── AI assessment on report ─────────────────────────────────────────────
+  // ── AI assessment on report ──────────────────────────────────────────────
   useEffect(() => {
     if (phase !== "report") return;
 
-    const userPicks = picks
+    const userPicksForAssessment = picks
       .filter((p, i) => p != null && getTeamSlot(i) === userSlot)
       .map((p) => p!);
 
@@ -332,7 +397,7 @@ export default function DraftRoomPage() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        roster: userPicks.map((p) => ({
+        roster: userPicksForAssessment.map((p) => ({
           name: p.player_name,
           position: p.position,
           team: p.team,
@@ -345,7 +410,7 @@ export default function DraftRoomPage() {
       .catch(() => { setAssessment("Unable to generate assessment at this time."); setAssessmentLoading(false); });
   }, [phase]);
 
-  // ── Actions ─────────────────────────────────────────────────────────────
+  // ── Actions ──────────────────────────────────────────────────────────────
 
   function randomiseSlot() {
     const s = Math.ceil(Math.random() * 14);
@@ -354,14 +419,43 @@ export default function DraftRoomPage() {
   }
 
   function startDraft() {
+    try { localStorage.removeItem("ff_draft_state"); } catch { /* ignore */ }
+    setSavedDraftData(null);
     const total = totalRounds * NUM_TEAMS;
     setPicks(Array(total).fill(null));
     setCurrentPickIndex(0);
     setPhase("drafting");
   }
 
+  function resumeDraft() {
+    if (!savedDraftData) return;
+    setPicks(savedDraftData.picks);
+    setCurrentPickIndex(savedDraftData.currentPickIndex);
+    setUserSlot(savedDraftData.userSlot);
+    setSlotInput(String(savedDraftData.userSlot));
+    setTotalRounds(savedDraftData.totalRounds);
+    setPhase(savedDraftData.phase);
+    setSavedDraftData(null);
+  }
+
+  function clearAndReset() {
+    try { localStorage.removeItem("ff_draft_state"); } catch { /* ignore */ }
+    setSavedDraftData(null);
+    setPhase("setup");
+    setAssessment(null);
+    setSearchQuery("");
+  }
+
   const makeUserPick = useCallback((player: Player) => {
-    const { currentPickIndex: idx, totalRounds: tr } = stateRef.current;
+    const { currentPickIndex: idx, totalRounds: tr, picks: p, userSlot: us } = stateRef.current;
+
+    // Enforce position limit for user
+    let posCount = 0;
+    for (let i = 0; i < idx; i++) {
+      if (getTeamSlot(i) === us && p[i]?.position === player.position) posCount++;
+    }
+    if (posCount >= (POS_LIMITS[player.position] ?? 999)) return;
+
     const nextIdx = idx + 1;
     setPicks((prev) => {
       const next = [...prev];
@@ -372,7 +466,7 @@ export default function DraftRoomPage() {
     if (nextIdx >= tr * NUM_TEAMS) setPhase("report");
   }, []);
 
-  // ── Derived data ─────────────────────────────────────────────────────────
+  // ── Derived data ──────────────────────────────────────────────────────────
 
   const draftedNames = useMemo(() => {
     const s = new Set<string>();
@@ -399,12 +493,18 @@ export default function DraftRoomPage() {
       : allPlayers;
   }, [allPlayers, searchQuery]);
 
-  const top5Recommended = useMemo(() => availablePlayers.slice(0, 5), [availablePlayers]);
-
   const userPicks = useMemo(
     () => picks.filter((p, i) => p != null && getTeamSlot(i) === userSlot).map((p) => p!),
     [picks, userSlot, currentPickIndex]
   );
+
+  const userPosCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    userPicks.forEach((p) => {
+      counts[p.position] = (counts[p.position] ?? 0) + 1;
+    });
+    return counts;
+  }, [userPicks]);
 
   const userRosterSlots = useMemo(() => assignToSlots(userPicks), [userPicks]);
 
@@ -413,7 +513,24 @@ export default function DraftRoomPage() {
     totalRounds
   );
 
-  // ── Team totals for report ────────────────────────────────────────────────
+  const top5Recommended = useMemo(() => {
+    return availablePlayers
+      .filter((p) => (userPosCounts[p.position] ?? 0) < (POS_LIMITS[p.position] ?? 999))
+      .slice(0, 5);
+  }, [availablePlayers, userPosCounts]);
+
+  // K/DEF warnings from round 14 onward
+  const rosterWarnings = useMemo(() => {
+    if (phase !== "drafting" || currentRound < 14) return [];
+    const msgs: string[] = [];
+    if (!userPicks.some((p) => p.position === "K"))
+      msgs.push("You have no Kicker — consider drafting one soon");
+    if (!userPicks.some((p) => p.position === "DEF"))
+      msgs.push("You have no Defense — consider drafting one soon");
+    return msgs;
+  }, [phase, currentRound, userPicks]);
+
+  // ── Team totals for report ─────────────────────────────────────────────────
 
   const teamTotals = useMemo(() => {
     if (phase !== "report") return [];
@@ -441,19 +558,23 @@ export default function DraftRoomPage() {
     return withDelta.length ? withDelta.reduce((b, p) => (p.value_delta! < b.value_delta! ? p : b)) : null;
   }, [userPicks]);
 
-  // ══════════════════════════════════════════════════════════════════════════
+  // ════════════════════════════════════════════════════════════════════════════
   // RENDER
-  // ══════════════════════════════════════════════════════════════════════════
+  // ════════════════════════════════════════════════════════════════════════════
 
-  // ── Setup screen ─────────────────────────────────────────────────────────
+  // ── Setup screen ───────────────────────────────────────────────────────────
   if (phase === "setup") {
+    const resumeRound = savedDraftData
+      ? Math.min(Math.floor(savedDraftData.currentPickIndex / NUM_TEAMS) + 1, savedDraftData.totalRounds)
+      : null;
+
     return (
       <div style={{ display: "flex", flexDirection: "column", flex: 1, background: "var(--bg-primary)" }}>
         <TabNav position="draft-room" />
         <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
           <div style={{
             background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: 10,
-            padding: 40, width: 360, display: "flex", flexDirection: "column", gap: 24,
+            padding: 40, width: 380, display: "flex", flexDirection: "column", gap: 24,
           }}>
             <div>
               <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--text-primary)" }}>Draft Room</h1>
@@ -461,6 +582,43 @@ export default function DraftRoomPage() {
                 14-team PPR snake draft vs 13 bot opponents
               </p>
             </div>
+
+            {/* Resume saved draft */}
+            {savedDraftData && (
+              <div style={{
+                background: "rgba(29,158,117,0.08)",
+                border: "1px solid var(--teal-dim)",
+                borderRadius: 6,
+                padding: "14px 16px",
+                display: "flex",
+                flexDirection: "column",
+                gap: 10,
+              }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: "var(--teal)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                  💾 Saved draft found
+                </div>
+                <div style={{ fontSize: 12, color: "var(--text-secondary)" }}>
+                  {savedDraftData.phase === "report"
+                    ? `Draft complete · ${savedDraftData.totalRounds} rounds · Slot ${savedDraftData.userSlot}`
+                    : `Round ${resumeRound}/${savedDraftData.totalRounds} · Slot ${savedDraftData.userSlot} · Pick ${savedDraftData.currentPickIndex + 1}`}
+                </div>
+                <button
+                  onClick={resumeDraft}
+                  style={{
+                    padding: "9px", borderRadius: 5, fontSize: 13, fontWeight: 700,
+                    background: "var(--teal)", border: "none", color: "#fff", cursor: "pointer",
+                  }}
+                >
+                  {savedDraftData.phase === "report" ? "View Draft Report →" : "Resume Draft →"}
+                </button>
+              </div>
+            )}
+
+            {savedDraftData && (
+              <div style={{ fontSize: 11, color: "var(--text-muted)", textAlign: "center", marginTop: -10 }}>
+                — or start a new draft —
+              </div>
+            )}
 
             <div>
               <label style={{ fontSize: 11, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.08em", display: "block", marginBottom: 8 }}>
@@ -528,11 +686,14 @@ export default function DraftRoomPage() {
               onClick={startDraft}
               style={{
                 padding: "12px", borderRadius: 6, fontSize: 15, fontWeight: 700,
-                background: "var(--teal)", border: "none", color: "#fff", cursor: "pointer",
+                background: savedDraftData ? "var(--bg-secondary)" : "var(--teal)",
+                border: `1px solid ${savedDraftData ? "var(--border)" : "var(--teal)"}`,
+                color: savedDraftData ? "var(--text-secondary)" : "#fff",
+                cursor: "pointer",
                 letterSpacing: "0.02em",
               }}
             >
-              Start Draft →
+              {savedDraftData ? "Start New Draft" : "Start Draft →"}
             </button>
           </div>
         </div>
@@ -540,7 +701,7 @@ export default function DraftRoomPage() {
     );
   }
 
-  // ── Draft Report ─────────────────────────────────────────────────────────
+  // ── Draft Report ──────────────────────────────────────────────────────────
   if (phase === "report") {
     const myPicks = picks.filter((p, i) => p != null && getTeamSlot(i) === userSlot).map((p) => p!);
     const myTotal = myPicks.reduce((s, p) => s + (p.projected_pts ?? 0), 0);
@@ -552,6 +713,7 @@ export default function DraftRoomPage() {
           <h1 style={{ fontSize: 24, fontWeight: 700, color: "var(--text-primary)", marginBottom: 4 }}>Draft Report</h1>
           <p style={{ fontSize: 13, color: "var(--text-secondary)", marginBottom: 32 }}>
             {totalRounds}-round PPR draft complete · Pick slot {userSlot}
+            {userRank > 0 && <> · You ranked <strong style={{ color: userRank <= 3 ? "var(--teal)" : "var(--text-primary)" }}>{userRank}/{NUM_TEAMS}</strong></>}
           </p>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginBottom: 32 }}>
@@ -649,7 +811,7 @@ export default function DraftRoomPage() {
           </div>
 
           <button
-            onClick={() => { setPhase("setup"); setAssessment(null); setSearchQuery(""); }}
+            onClick={clearAndReset}
             style={{ marginTop: 32, padding: "10px 24px", borderRadius: 5, fontSize: 13, fontWeight: 600, cursor: "pointer", background: "var(--bg-card)", border: "1px solid var(--border)", color: "var(--text-secondary)" }}
           >
             ← New Draft
@@ -659,7 +821,7 @@ export default function DraftRoomPage() {
     );
   }
 
-  // ── Draft Room (active) ──────────────────────────────────────────────────
+  // ── Draft Room (active) ───────────────────────────────────────────────────
   return (
     <div style={{ display: "flex", flexDirection: "column", flex: 1, background: "var(--bg-primary)", overflow: "hidden" }}>
       <TabNav position="draft-room" />
@@ -686,10 +848,24 @@ export default function DraftRoomPage() {
         )}
       </div>
 
+      {/* K/DEF warning banners */}
+      {rosterWarnings.map((msg) => (
+        <div key={msg} style={{
+          background: "rgba(239,159,39,0.1)",
+          borderBottom: "1px solid rgba(239,159,39,0.3)",
+          padding: "6px 20px",
+          fontSize: 12,
+          color: "#EF9F27",
+          flexShrink: 0,
+        }}>
+          ⚠ {msg}
+        </div>
+      ))}
+
       {/* 3-panel layout */}
       <div style={{ flex: 1, display: "flex", overflow: "hidden" }}>
 
-        {/* ── Left: Available players ─────────────────────────────────────── */}
+        {/* ── Left: Available players ──────────────────────────────────────── */}
         <div style={{ width: "38%", display: "flex", flexDirection: "column", borderRight: "1px solid var(--border)", overflow: "hidden" }}>
           <div style={{ padding: "10px 14px", borderBottom: "1px solid var(--border)", flexShrink: 0 }}>
             <input
@@ -704,7 +880,7 @@ export default function DraftRoomPage() {
             />
           </div>
 
-          {isUserTurn && !searchQuery && (
+          {isUserTurn && !searchQuery && top5Recommended.length > 0 && (
             <div style={{ padding: "10px 14px", borderBottom: "1px solid var(--border)", background: "rgba(239,159,39,0.05)", flexShrink: 0 }}>
               <div style={{ fontSize: 10, fontWeight: 700, color: "#EF9F27", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 8 }}>
                 Top Recommendations
@@ -712,7 +888,7 @@ export default function DraftRoomPage() {
               {top5Recommended.map((p) => (
                 <div key={p.player_name} style={{
                   display: "flex", alignItems: "center", gap: 8, padding: "6px 0",
-                  borderBottom: "1px solid #1e2330",
+                  borderBottom: "1px solid var(--border)",
                 }}>
                   <span style={{ fontSize: 9, fontWeight: 700, color: POS_COLORS[p.position], width: 24 }}>{p.position}</span>
                   <span style={{ flex: 1, fontSize: 12, fontWeight: 600, color: "var(--text-primary)" }}>{p.player_name}</span>
@@ -736,18 +912,19 @@ export default function DraftRoomPage() {
               <tbody>
                 {(() => {
                   let lastTier: number | null = null;
-                  return filteredDisplay.slice(0, 200).map((player) => {
+                  return filteredDisplay.map((player) => {
                     const tier = getTier(player.vor_score);
                     const showDiv = tier !== lastTier;
                     lastTier = tier;
                     const isDrafted = draftedNames.has(player.player_name);
-                    const isAvail = !isDrafted;
+                    const isPosBlocked = !isDrafted && (userPosCounts[player.position] ?? 0) >= (POS_LIMITS[player.position] ?? 999);
+                    const canPick = !isDrafted && !isPosBlocked && isUserTurn;
                     const tierCfg = getTierConfig(tier);
 
                     return (
                       <Fragment key={player.rank}>
                         {showDiv && (
-                          <tr style={{ background: "#070910" }}>
+                          <tr style={{ background: "#111318" }}>
                             <td colSpan={3} style={{ padding: "4px 12px", borderTop: "1px solid var(--border)" }}>
                               <span style={{ color: tierCfg.color, fontSize: 10, fontWeight: 700 }}>
                                 {tierCfg.icon} {tierCfg.label}
@@ -757,8 +934,8 @@ export default function DraftRoomPage() {
                         )}
                         <tr
                           style={{
-                            borderBottom: "1px solid #161a24",
-                            opacity: isDrafted ? 0.3 : 1,
+                            borderBottom: "1px solid #22252f",
+                            opacity: isDrafted ? 0.25 : isPosBlocked ? 0.4 : 1,
                           }}
                         >
                           <td style={{ padding: "7px 12px", width: 28 }}>
@@ -767,11 +944,13 @@ export default function DraftRoomPage() {
                             </span>
                           </td>
                           <td style={{ padding: "7px 4px" }}>
-                            <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-primary)" }}>{player.player_name}</div>
+                            <div style={{ fontSize: 12, fontWeight: 600, color: isPosBlocked ? "var(--text-muted)" : "var(--text-primary)" }}>
+                              {player.player_name}
+                            </div>
                             <div style={{ fontSize: 10, color: "var(--text-secondary)" }}>{player.team}</div>
                           </td>
                           <td style={{ padding: "7px 12px", textAlign: "right" }}>
-                            {isAvail && isUserTurn ? (
+                            {canPick ? (
                               <button
                                 onClick={() => makeUserPick(player)}
                                 style={{
@@ -781,6 +960,8 @@ export default function DraftRoomPage() {
                               >
                                 Pick
                               </button>
+                            ) : isPosBlocked && isUserTurn ? (
+                              <span style={{ fontSize: 9, color: "var(--red)", fontWeight: 600 }}>FULL</span>
                             ) : (
                               <span style={{ fontSize: 10, color: "var(--text-muted)" }}>
                                 {player.projected_pts?.toFixed(0)}
@@ -797,7 +978,7 @@ export default function DraftRoomPage() {
           </div>
         </div>
 
-        {/* ── Center: Draft grid ──────────────────────────────────────────── */}
+        {/* ── Center: Draft grid ───────────────────────────────────────────── */}
         <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
           <div style={{ padding: "8px 12px", borderBottom: "1px solid var(--border)", fontSize: 10, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.08em", flexShrink: 0 }}>
             Draft Board
@@ -837,7 +1018,7 @@ export default function DraftRoomPage() {
                   const round = r + 1;
                   return (
                     <tr key={round}>
-                      <td style={{ padding: "4px 6px", color: "var(--text-muted)", textAlign: "center", fontSize: 9, borderBottom: "1px solid #0f1117", fontWeight: 600 }}>
+                      <td style={{ padding: "4px 6px", color: "var(--text-muted)", textAlign: "center", fontSize: 9, borderBottom: "1px solid var(--bg-primary)", fontWeight: 600 }}>
                         {round}
                       </td>
                       {Array.from({ length: NUM_TEAMS }, (_, s) => {
@@ -846,10 +1027,9 @@ export default function DraftRoomPage() {
                         const player = picks[pIdx];
                         const isCurrent = pIdx === currentPickIndex && phase === "drafting";
                         const isUser = slot === userSlot;
-                        const isPast = pIdx < currentPickIndex;
 
                         let bg = "transparent";
-                        let border = "1px solid #161a24";
+                        let border = "1px solid #22252f";
                         if (isCurrent) { bg = "rgba(239,159,39,0.12)"; border = "1px solid #EF9F27"; }
                         else if (isUser && player) { bg = "rgba(13,45,31,0.6)"; border = "1px solid #1e3a2a"; }
 
@@ -886,7 +1066,7 @@ export default function DraftRoomPage() {
           </div>
         </div>
 
-        {/* ── Right: User's roster ────────────────────────────────────────── */}
+        {/* ── Right: User's roster ─────────────────────────────────────────── */}
         <div style={{ width: 220, borderLeft: "1px solid var(--border)", display: "flex", flexDirection: "column", overflow: "hidden", flexShrink: 0 }}>
           <div style={{ padding: "8px 12px", borderBottom: "1px solid var(--border)", fontSize: 10, fontWeight: 700, color: "var(--teal)", textTransform: "uppercase", letterSpacing: "0.08em", flexShrink: 0 }}>
             Your Roster
