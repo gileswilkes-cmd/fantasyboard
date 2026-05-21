@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { Player } from "@/lib/data";
 import SearchBar from "./SearchBar";
 import PlayerTable from "./PlayerTable";
+import GuidePanel from "./GuidePanel";
 
 function filterPlayers(query: string, players: Player[]): Player[] {
   const q = query.toLowerCase().trim();
@@ -28,6 +29,7 @@ export default function BoardClient({ players }: BoardClientProps) {
     <>
       <SearchBar value={query} onChange={setQuery} />
       <PlayerTable players={filtered} />
+      <GuidePanel />
     </>
   );
 }

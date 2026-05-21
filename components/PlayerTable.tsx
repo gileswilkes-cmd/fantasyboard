@@ -1,8 +1,9 @@
 "use client";
 
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect, useCallback } from "react";
 import type { Player } from "@/lib/data";
 import PlayerCard from "./PlayerCard";
+import PlayerContextMenu from "./PlayerContextMenu";
 import { getTier, getTierConfig } from "@/lib/tiers";
 import NflLogo from "./NflLogo";
 
@@ -12,6 +13,12 @@ interface PlayerTableProps {
 
 type SortKey = "rank" | "vor_score" | "projected_pts" | "adp" | "value_delta" | "avg_ppr_2025";
 type SortDir = "asc" | "desc";
+
+interface ContextMenuState {
+  x: number;
+  y: number;
+  playerName: string;
+}
 
 const POSITION_TAGS: Record<string, { color: string; bg: string }> = {
   WR:  { color: "var(--teal)",        bg: "var(--teal-bg)" },
@@ -45,7 +52,7 @@ function sortPlayers(players: Player[], key: SortKey, dir: SortDir): Player[] {
 function TierDividerRow({ tier, colSpan }: { tier: number; colSpan: number }) {
   const config = getTierConfig(tier);
   return (
-    <tr style={{ background: "#070910", pointerEvents: "none" }}>
+    <tr style={{ background: "#111318", pointerEvents: "none" }}>
       <td colSpan={colSpan} style={{ padding: "5px 16px", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span style={{ color: config.color, fontSize: 15, lineHeight: 1 }}>{config.icon}</span>
@@ -59,43 +66,100 @@ function TierDividerRow({ tier, colSpan }: { tier: number; colSpan: number }) {
   );
 }
 
+function DndDividerRow({ colSpan }: { colSpan: number }) {
+  return (
+    <tr style={{ background: "#1a0d0d", pointerEvents: "none" }}>
+      <td colSpan={colSpan} style={{ padding: "5px 16px", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ color: "#E24B4A", fontSize: 13, lineHeight: 1 }}>✕</span>
+          <span style={{ color: "#E24B4A", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}>
+            Do Not Draft
+          </span>
+          <span style={{ color: "var(--text-muted)", fontSize: 11 }}>— excluded players</span>
+        </div>
+      </td>
+    </tr>
+  );
+}
+
 export default function PlayerTable({ players }: PlayerTableProps) {
   const [sortKey, setSortKey] = useState<SortKey>("rank");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
   const [expandedRank, setExpandedRank] = useState<number | null>(null);
   const [hoveredRank, setHoveredRank] = useState<number | null>(null);
   const [starred, setStarred] = useState<Set<string>>(new Set());
+  const [dnd, setDnd] = useState<Set<string>>(new Set());
+  const [tierOverrides, setTierOverrides] = useState<Record<string, number>>({});
+  const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null);
 
   useEffect(() => {
     try {
       const saved = localStorage.getItem("ff_starred_players");
       if (saved) setStarred(new Set(JSON.parse(saved)));
+      const savedDnd = localStorage.getItem("ff_dnd_players");
+      if (savedDnd) setDnd(new Set(JSON.parse(savedDnd)));
+      const savedTiers = localStorage.getItem("ff_tier_overrides");
+      if (savedTiers) setTierOverrides(JSON.parse(savedTiers));
     } catch { /* ignore */ }
   }, []);
 
-  function toggleStar(e: React.MouseEvent, playerName: string) {
-    e.stopPropagation();
+  function toggleStar(playerName: string) {
     setStarred((prev) => {
       const next = new Set(prev);
-      if (next.has(playerName)) {
-        next.delete(playerName);
-      } else {
-        next.add(playerName);
-      }
-      try {
-        localStorage.setItem("ff_starred_players", JSON.stringify([...next]));
-      } catch { /* ignore */ }
+      if (next.has(playerName)) next.delete(playerName);
+      else next.add(playerName);
+      try { localStorage.setItem("ff_starred_players", JSON.stringify([...next])); } catch { /* ignore */ }
       return next;
     });
   }
 
+  function setTierOverride(playerName: string, tier: number) {
+    setTierOverrides((prev) => {
+      const next = { ...prev, [playerName]: tier };
+      try { localStorage.setItem("ff_tier_overrides", JSON.stringify(next)); } catch { /* ignore */ }
+      return next;
+    });
+  }
+
+  function toggleDnd(playerName: string) {
+    setDnd((prev) => {
+      const next = new Set(prev);
+      if (next.has(playerName)) next.delete(playerName);
+      else next.add(playerName);
+      try { localStorage.setItem("ff_dnd_players", JSON.stringify([...next])); } catch { /* ignore */ }
+      return next;
+    });
+  }
+
+  function handleContextMenu(e: React.MouseEvent, playerName: string) {
+    e.preventDefault();
+    setContextMenu({ x: e.clientX, y: e.clientY, playerName });
+  }
+
+  const closeContextMenu = useCallback(() => setContextMenu(null), []);
+
   const sorted = sortPlayers(players, sortKey, sortDir);
 
-  const sortedWithMeta = sorted.map((player, index) => ({
-    player,
-    tier: getTier(player.vor_score),
-    showDivider: index === 0 || getTier(player.vor_score) !== getTier(sorted[index - 1].vor_score),
-  }));
+  function effectiveTier(player: Player): number {
+    return tierOverrides[player.player_name] ?? getTier(player.vor_score);
+  }
+
+  const nonDnd = sorted.filter((p) => !dnd.has(p.player_name));
+  const dndPlayers = sorted.filter((p) => dnd.has(p.player_name));
+  const reordered = [...nonDnd, ...dndPlayers];
+
+  const sortedWithMeta = reordered.map((player, index) => {
+    const isDndPlayer = dnd.has(player.player_name);
+    const tier = effectiveTier(player);
+    const prevIsDnd = index > 0 ? dnd.has(reordered[index - 1].player_name) : false;
+    const isFirstDnd = isDndPlayer && !prevIsDnd;
+    const prevTier = index > 0 ? effectiveTier(reordered[index - 1]) : null;
+
+    const showDndDivider = isFirstDnd;
+    const showDivider = !isDndPlayer && (index === 0 || tier !== prevTier);
+
+    return { player, tier, showDivider, showDndDivider, isDndPlayer };
+  });
 
   function handleSort(key: SortKey | null) {
     if (!key) return;
@@ -158,7 +222,7 @@ export default function PlayerTable({ players }: PlayerTableProps) {
           </tr>
         </thead>
         <tbody>
-          {sortedWithMeta.map(({ player, tier, showDivider }) => {
+          {sortedWithMeta.map(({ player, tier, showDivider, showDndDivider, isDndPlayer }) => {
             const tag = POSITION_TAGS[player.position] ?? {
               color: "var(--text-secondary)",
               bg: "var(--bg-card)",
@@ -166,26 +230,36 @@ export default function PlayerTable({ players }: PlayerTableProps) {
             const isExpanded = expandedRank === player.rank;
             const isHovered = hoveredRank === player.rank;
             const isStarred = starred.has(player.player_name);
-            const rowBg = isExpanded || isHovered ? "#161a24" : "transparent";
+
+            let rowBg: string;
+            if (isDndPlayer) {
+              rowBg = isHovered ? "rgba(45,13,13,0.6)" : "rgba(45,13,13,0.3)";
+            } else if (isStarred) {
+              rowBg = isHovered ? "#0d1f1a" : "rgba(13,45,31,0.3)";
+            } else {
+              rowBg = isExpanded || isHovered ? "#22252f" : "transparent";
+            }
 
             return (
               <Fragment key={player.rank}>
+                {showDndDivider && <DndDividerRow colSpan={COLUMNS.length} />}
                 {showDivider && <TierDividerRow tier={tier} colSpan={COLUMNS.length} />}
                 <tr
                   onClick={() => handleRowClick(player.rank)}
                   onMouseEnter={() => setHoveredRank(player.rank)}
                   onMouseLeave={() => setHoveredRank(null)}
+                  onContextMenu={(e) => handleContextMenu(e, player.player_name)}
                   style={{
-                    borderBottom: "1px solid #161a24",
+                    borderBottom: "1px solid #22252f",
                     borderLeft: isStarred ? "2px solid #1D9E75" : "2px solid transparent",
-                    background: isStarred ? (isHovered ? "#0d1f1a" : "rgba(13,45,31,0.3)") : rowBg,
+                    background: rowBg,
                     cursor: "pointer",
                   }}
                 >
                   {/* Star */}
                   <td style={{ padding: "9px 8px", textAlign: "center", width: 32 }}>
                     <button
-                      onClick={(e) => toggleStar(e, player.player_name)}
+                      onClick={(e) => { e.stopPropagation(); toggleStar(player.player_name); }}
                       title={isStarred ? "Remove star" : "Star player"}
                       style={{
                         background: "none",
@@ -203,7 +277,7 @@ export default function PlayerTable({ players }: PlayerTableProps) {
 
                   {/* Rank */}
                   <td style={{ padding: "9px 16px", textAlign: "center", width: 44 }}>
-                    <span style={{ color: "var(--teal)", fontWeight: 600, fontSize: 15 }}>
+                    <span style={{ color: isDndPlayer ? "var(--red)" : "var(--teal)", fontWeight: 600, fontSize: 15 }}>
                       {player.rank}
                     </span>
                   </td>
@@ -214,7 +288,7 @@ export default function PlayerTable({ players }: PlayerTableProps) {
                       <NflLogo team={player.team} size={24} />
                       <div>
                         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                          <span style={{ color: "var(--text-primary)", fontSize: 15, fontWeight: 700 }}>
+                          <span style={{ color: isDndPlayer ? "var(--red)" : "#ffffff", fontSize: 15, fontWeight: 700 }}>
                             {player.player_name}
                           </span>
                           <span
@@ -230,7 +304,7 @@ export default function PlayerTable({ players }: PlayerTableProps) {
                             {player.position}
                           </span>
                         </div>
-                        <div style={{ fontSize: 12, color: "#9ca3af", fontWeight: 500, marginTop: 2 }}>
+                        <div style={{ fontSize: 12, color: "#c8cad4", fontWeight: 500, marginTop: 2 }}>
                           {player.team}
                         </div>
                       </div>
@@ -239,14 +313,14 @@ export default function PlayerTable({ players }: PlayerTableProps) {
 
                   {/* VOR */}
                   <td style={{ padding: "9px 16px", textAlign: "right" }}>
-                    <span style={{ color: "var(--text-primary)", fontSize: 14 }}>
+                    <span style={{ color: isDndPlayer ? "var(--red)" : "var(--text-primary)", fontSize: 14 }}>
                       {player.vor_score?.toFixed(1) ?? "—"}
                     </span>
                   </td>
 
                   {/* Proj Pts */}
                   <td style={{ padding: "9px 16px", textAlign: "right" }}>
-                    <span style={{ color: "var(--text-primary)", fontSize: 14 }}>
+                    <span style={{ color: isDndPlayer ? "var(--red)" : "var(--text-primary)", fontSize: 14 }}>
                       {player.projected_pts?.toFixed(1) ?? "—"}
                     </span>
                   </td>
@@ -271,24 +345,33 @@ export default function PlayerTable({ players }: PlayerTableProps) {
 
                   {/* Avg PPR */}
                   <td style={{ padding: "9px 16px", textAlign: "right" }}>
-                    <span style={{ color: "var(--text-primary)", fontSize: 14 }}>
+                    <span style={{ color: isDndPlayer ? "var(--red)" : "var(--text-primary)", fontSize: 14 }}>
                       {player.avg_ppr_2025?.toFixed(1) ?? "—"}
                     </span>
                   </td>
 
                   {/* Flag */}
                   <td style={{ padding: "9px 16px", textAlign: "center" }}>
-                    {player.risk_flag ? (
-                      <span
-                        style={{
-                          fontSize: 10,
-                          fontWeight: 600,
-                          padding: "2px 6px",
-                          borderRadius: 3,
-                          color: "var(--amber-tag)",
-                          background: "var(--amber-tag-bg)",
-                        }}
-                      >
+                    {isDndPlayer ? (
+                      <span style={{
+                        fontSize: 10,
+                        fontWeight: 600,
+                        padding: "2px 6px",
+                        borderRadius: 3,
+                        color: "var(--red)",
+                        background: "var(--red-bg)",
+                      }}>
+                        ✕
+                      </span>
+                    ) : player.risk_flag ? (
+                      <span style={{
+                        fontSize: 10,
+                        fontWeight: 600,
+                        padding: "2px 6px",
+                        borderRadius: 3,
+                        color: "var(--amber-tag)",
+                        background: "var(--amber-tag-bg)",
+                      }}>
                         ⚠
                       </span>
                     ) : null}
@@ -307,6 +390,21 @@ export default function PlayerTable({ players }: PlayerTableProps) {
           })}
         </tbody>
       </table>
+
+      {contextMenu && (
+        <PlayerContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          playerName={contextMenu.playerName}
+          isStarred={starred.has(contextMenu.playerName)}
+          isDnd={dnd.has(contextMenu.playerName)}
+          tierOverride={tierOverrides[contextMenu.playerName] ?? null}
+          onStar={() => toggleStar(contextMenu.playerName)}
+          onTier={(t) => setTierOverride(contextMenu.playerName, t)}
+          onDnd={() => toggleDnd(contextMenu.playerName)}
+          onClose={closeContextMenu}
+        />
+      )}
     </div>
   );
 }
