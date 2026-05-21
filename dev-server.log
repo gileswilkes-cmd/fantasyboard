@@ -1,0 +1,18 @@
+
+> fantasyboard@0.1.0 dev
+> next dev
+
+ ⚠ Port 3000 is in use by process 18460, using available port 3002 instead.
+   ▲ Next.js 15.5.18
+   - Local:        http://localhost:3002
+   - Network:      http://192.168.1.165:3002
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 3s
+ ○ Compiling / ...
+ ✓ Compiled / in 1270ms (554 modules)
+ GET / 307 in 2305ms
+ ○ Compiling /board ...
+ ✓ Compiled /board in 1688ms (650 modules)
+ GET /board 200 in 3481ms

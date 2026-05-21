@@ -7,6 +7,7 @@ import { useState } from "react";
 const ESPN_OVERRIDES: Record<string, string> = {
   LA: "lar",   // Rams
   WAS: "wsh",  // Commanders
+  NE: "nep",   // Patriots
 };
 
 function toEspnCode(team: string): string {
