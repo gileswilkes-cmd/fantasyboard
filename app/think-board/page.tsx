@@ -19,6 +19,24 @@ const BYE_WEEKS_2026: Record<string, number> = {
 
 const STARTER_SLOT_IDS = ["QB", "RB1", "RB2", "WR1", "WR2", "TE", "Flex", "K", "DEF"];
 
+const SLOT_POSITIONS: Record<string, string[] | null> = {
+  QB:   ["QB"],
+  RB1:  ["RB"],
+  RB2:  ["RB"],
+  WR1:  ["WR"],
+  WR2:  ["WR"],
+  TE:   ["TE"],
+  Flex: ["RB", "WR", "TE"],
+  K:    ["K"],
+  DEF:  ["DEF"],
+};
+
+function playersForSlot(players: Player[], slotId: string): Player[] {
+  const allowed = SLOT_POSITIONS[slotId];
+  if (!allowed) return players; // bench slots — show all
+  return players.filter((p) => allowed.includes(p.position));
+}
+
 const ROSTER_SLOTS = [
   { id: "QB",   label: "QB",      starter: true  },
   { id: "RB1",  label: "RB 1",    starter: true  },
@@ -566,7 +584,7 @@ export default function ThinkBoardPage() {
 
       {pickerSlot && (
         <PlayerPicker
-          players={allPlayers}
+          players={playersForSlot(allPlayers, pickerSlot.slotId)}
           assigned={pickerAssigned}
           onSelect={handlePlayerSelect}
           onClose={() => setPickerSlot(null)}
