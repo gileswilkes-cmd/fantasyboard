@@ -1,7 +1,3 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  outputFileTracingRoot: "C:/projects/fantasyboard",
-};
-
+/** @type {import('next').NextConfig} */
+const nextConfig = {};
 export default nextConfig;
