@@ -303,6 +303,21 @@ export default function PlayerTable({ players }: PlayerTableProps) {
                           >
                             {player.position}
                           </span>
+                          {player.risk_flag === "Rookie" && (
+                            <span
+                              style={{
+                                fontSize: 10,
+                                fontWeight: 700,
+                                padding: "2px 5px",
+                                borderRadius: 3,
+                                color: "var(--teal)",
+                                background: "rgba(29,158,117,0.15)",
+                                letterSpacing: "0.05em",
+                              }}
+                            >
+                              RC
+                            </span>
+                          )}
                         </div>
                         <div style={{ fontSize: 12, color: "#c8cad4", fontWeight: 500, marginTop: 2 }}>
                           {player.team}

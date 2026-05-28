@@ -6078,5 +6078,149 @@
     "comp": "De'Lance Turner 2019 — a practice-squad-level back with no discernible path to carries",
     "verdict_badge": "Avoid",
     "verdict_text": "Do not draft; only relevant if multiple Raiders backs suffer injuries."
+  },
+  "C.Tate": {
+    "one_liner": "Rookie WR in Tennessee with zero 2025 production and inflated ADP.",
+    "strengths": [
+      "3 boom weeks in 2024 show high-upside ceiling when active",
+      "19% boom rate suggests explosive play potential if role develops",
+      "Early-career trajectory leaves room for breakout if target share grows"
+    ],
+    "weaknesses": [
+      "All 18 tracked 2025 weeks are DNPs — no current relevance",
+      "VOR rank of 391 vs ADP of 65 is a massive overpay",
+      "High bust rate (6/16) and std dev of 9 signal extreme inconsistency"
+    ],
+    "comp": "Tajae Sharpe 2016 — hyped rookie WR on struggling Titans offense who failed to sustain early flashes",
+    "verdict_badge": "Avoid",
+    "verdict_text": "Zero 2025 snaps and overpriced — let someone else draft him."
+  },
+  "J.Tyson": {
+    "one_liner": "Tyson has no 2025 production yet; all value is speculative based on draft capital alone.",
+    "strengths": [
+      "High draft capital suggests organizational belief in his role",
+      "Boom upside present with 3 games of 20+ points in limited sample",
+      "Young receiver on Saints offense with potential target share to claim"
+    ],
+    "weaknesses": [
+      "Zero 2025 snaps or stats — DNP every week recorded",
+      "ADP of 72 wildly overvalues a player with no current-season production",
+      "High bust rate with 6 of 16 historical weeks under 10 points"
+    ],
+    "comp": "Rashid Shaheed 2022 — another Saints receiver hyped on potential before delivering inconsistent results",
+    "verdict_badge": "Avoid",
+    "verdict_text": "No 2025 production exists; do not pay ADP 72 for pure speculation."
+  },
+  "O.Cooper": {
+    "one_liner": "Cooper has gone DNP all 2025 with zero fantasy production and massive ADP risk.",
+    "strengths": [
+      "Flashed boom upside in 2024 with 3 games of 20+ PPR points",
+      "Landed on high-volume LAR offense with Cooper Kupp injury history creating opportunity",
+      "Youth and athleticism as a rookie leave long-term ceiling intact"
+    ],
+    "weaknesses": [
+      "Zero 2025 production — all 18 tracked weeks are DNPs",
+      "ADP rank of 80 vastly overvalues a player with no active contribution",
+      "High bust rate of 6/16 weeks under 10 points even when active"
+    ],
+    "comp": "Puka Nacua 2023 — rookie with LAR buzz but health and role uncertainty clouded early value",
+    "verdict_badge": "Avoid",
+    "verdict_text": "Complete no-show in 2025; do not draft until active and contributing."
+  },
+  "J.Price": {
+    "one_liner": "Price is a KC rookie with no 2025 snaps and massive ADP risk at 58.",
+    "strengths": [
+      "Landed in KC offensive system with proven fantasy output potential",
+      "Boom upside present with 3 games of 20+ pts in limited sample",
+      "Early-round ADP suggests industry belief in developmental upside"
+    ],
+    "weaknesses": [
+      "Zero 2025 production — all DNP, no statistical foundation to value",
+      "ADP 58 with VOR 394 is a catastrophic value gap signaling severe overdraft risk",
+      "Rookie flag plus high bust rate (6/16) makes floor dangerously low"
+    ],
+    "comp": "Clyde Edwards-Helaire 2021 — hyped KC rookie RB who disappointed due to role uncertainty and injury",
+    "verdict_badge": "Avoid",
+    "verdict_text": "Do not pay RB2 price for a rookie with no 2025 snaps logged."
+  },
+  "F.Mendoza": {
+    "one_liner": "Mendoza is a rookie QB on Las Vegas with zero 2025 production and massive uncertainty.",
+    "strengths": [
+      "Showed boom upside in 2024 with 5 games at or above 20 points in 16 weeks",
+      "Bust rate of 25% is manageable for a developmental QB",
+      "ADP at 52 suggests market sees some long-term upside worth monitoring"
+    ],
+    "weaknesses": [
+      "Has not played a single snap in 2025 across 18 weeks — all DNP",
+      "VOR rank of 395 signals negligible fantasy value relative to replacement level",
+      "Rookie flag combined with zero current-year stats makes projection nearly impossible"
+    ],
+    "comp": "Aidan O'Connell 2023 — similarly unproven Raiders QB thrust into uncertainty with minimal fantasy payoff",
+    "verdict_badge": "Avoid",
+    "verdict_text": "DNP all season; do not roster unless desperate or in deep dynasty leagues."
+  },
+  "A.Williams": {
+    "one_liner": "Rookie WR on Washington with zero 2025 production and massive ADP inflation.",
+    "strengths": [
+      "High upside landing spot on a pass-heavy Washington offense",
+      "Rookie receivers can break out mid-season once acclimated",
+      "Two boom weeks in 2024 show ceiling exists"
+    ],
+    "weaknesses": [
+      "Completely DNP all 2025 season — no fantasy value confirmed",
+      "VOR rank 396 vs ADP 110 is a catastrophic value mismatch",
+      "44% bust rate in 2024 signals extreme floor volatility"
+    ],
+    "comp": "Jahan Dotson 2022 — drafted heavily on hype, delivered inconsistent and injury-plagued returns",
+    "verdict_badge": "Avoid",
+    "verdict_text": "Zero 2025 snaps and terrible VOR — let someone else gamble here."
+  },
+  "Z.Branch": {
+    "one_liner": "Rookie ATL wideout with zero 2025 production and massive ADP-to-VOR disconnect.",
+    "strengths": [
+      "High-upside rookie profile warrants late-round speculation",
+      "Two boom weeks in 2024 show ceiling exists",
+      "Atlanta offense can support breakout if role expands"
+    ],
+    "weaknesses": [
+      "VOR rank of 397 versus ADP of 118 signals severe overvaluation",
+      "7 of 16 weeks under 10 points — chronic bust risk",
+      "Zero 2025 activity raises serious usage and health concerns"
+    ],
+    "comp": "Christian Kirk 2019 — drafted on potential, delivered inconsistency and roster headaches",
+    "verdict_badge": "Avoid",
+    "verdict_text": "ADP is a trap; pass entirely unless free in the final rounds."
+  },
+  "K.Black": {
+    "one_liner": "Rookie RB on SF with no 2025 snaps and a VOR rank of 398 screams avoid.",
+    "strengths": [
+      "SF offensive system can produce fantasy-relevant RBs when healthy",
+      "Rookie status means upside if depth chart shifts",
+      "Low ADP cost if falling past round 10-11 range"
+    ],
+    "weaknesses": [
+      "Zero 2025 production — all DNPs, no role established",
+      "VOR rank 398 with ADP 130 signals massive overvaluation",
+      "8 bust weeks in 16 games shows severe inconsistency baseline"
+    ],
+    "comp": "Tyrion Davis-Price 2022 — hyped SF rookie RB who never secured meaningful workload",
+    "verdict_badge": "Avoid",
+    "verdict_text": "Skip entirely — no role, no production, drastically overvalued at ADP 130."
+  },
+  "S.Roush": {
+    "one_liner": "Roush has produced nothing in 2025 with 18 straight DNPs and near-zero fantasy value.",
+    "strengths": [
+      "Cheap speculative add if roster spot is free",
+      "Upside exists as a younger developmental TE on a rebuilding team",
+      "One boom week in 2024 shows ceiling exists in rare opportunities"
+    ],
+    "weaknesses": [
+      "18 consecutive DNPs in 2025 renders him fantasy irrelevant",
+      "ADP-to-VOR gap signals massive overvaluation at pick 145",
+      "50% bust rate in 2024 with zero scoring floor"
+    ],
+    "comp": "Jesper Horsted 2020 — fringe TE with sporadic snaps and no reliable role",
+    "verdict_badge": "Avoid",
+    "verdict_text": "Zero 2025 production and 18 DNPs — do not roster in any format."
   }
 }

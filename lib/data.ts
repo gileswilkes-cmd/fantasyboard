@@ -20,6 +20,7 @@ export interface Player {
   bust_weeks: number | null;
   risk_flag: string | null;
   weekly_scores: (number | null)[];
+  rookie?: boolean;
 }
 
 export interface PositionSummary {
