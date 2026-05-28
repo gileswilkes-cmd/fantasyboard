@@ -14,6 +14,8 @@ interface PlayerTableProps {
 type SortKey = "rank" | "vor_score" | "projected_pts" | "adp" | "value_delta" | "avg_ppr_2025";
 type SortDir = "asc" | "desc";
 
+const TIER_SORT_KEYS = new Set<SortKey>(["rank", "vor_score"]);
+
 interface ContextMenuState {
   x: number;
   y: number;
@@ -39,7 +41,20 @@ const COLUMNS: { label: string; key: SortKey | null; align: "left" | "right" | "
   { label: "Flag",     key: null,            align: "center" },
 ];
 
-function sortPlayers(players: Player[], key: SortKey, dir: SortDir): Player[] {
+function sortPlayers(
+  players: Player[],
+  key: SortKey,
+  dir: SortDir,
+  tierOverrides: Record<string, number>
+): Player[] {
+  if (TIER_SORT_KEYS.has(key)) {
+    return [...players].sort((a, b) => {
+      const ta = tierOverrides[a.player_name] ?? getTier(a.vor_score);
+      const tb = tierOverrides[b.player_name] ?? getTier(b.vor_score);
+      if (ta !== tb) return ta - tb;
+      return (b.vor_score ?? -Infinity) - (a.vor_score ?? -Infinity);
+    });
+  }
   return [...players].sort((a, b) => {
     const av = a[key] ?? (dir === "asc" ? Infinity : -Infinity);
     const bv = b[key] ?? (dir === "asc" ? Infinity : -Infinity);
@@ -56,10 +71,10 @@ function TierDividerRow({ tier, colSpan }: { tier: number; colSpan: number }) {
       <td colSpan={colSpan} style={{ padding: "5px 16px", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span style={{ color: config.color, fontSize: 15, lineHeight: 1 }}>{config.icon}</span>
-          <span style={{ color: config.color, fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}>
+          <span style={{ color: config.color, fontSize: 13, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}>
             {config.label}
           </span>
-          <span style={{ color: "var(--text-muted)", fontSize: 11 }}>— {config.description}</span>
+          <span style={{ color: "var(--text-muted)", fontSize: 13 }}>— {config.description}</span>
         </div>
       </td>
     </tr>
@@ -138,7 +153,8 @@ export default function PlayerTable({ players }: PlayerTableProps) {
 
   const closeContextMenu = useCallback(() => setContextMenu(null), []);
 
-  const sorted = sortPlayers(players, sortKey, sortDir);
+  const isTierGrouped = TIER_SORT_KEYS.has(sortKey);
+  const sorted = sortPlayers(players, sortKey, sortDir, tierOverrides);
 
   function effectiveTier(player: Player): number {
     return tierOverrides[player.player_name] ?? getTier(player.vor_score);
@@ -156,7 +172,7 @@ export default function PlayerTable({ players }: PlayerTableProps) {
     const prevTier = index > 0 ? effectiveTier(reordered[index - 1]) : null;
 
     const showDndDivider = isFirstDnd;
-    const showDivider = !isDndPlayer && (index === 0 || tier !== prevTier);
+    const showDivider = isTierGrouped && !isDndPlayer && (index === 0 || tier !== prevTier);
 
     return { player, tier, showDivider, showDndDivider, isDndPlayer };
   });
@@ -202,7 +218,7 @@ export default function PlayerTable({ players }: PlayerTableProps) {
                 onClick={() => handleSort(col.key)}
                 style={{
                   padding: "10px 16px",
-                  fontSize: 11,
+                  fontSize: 12,
                   fontWeight: 600,
                   color: col.key === sortKey ? "var(--teal)" : "var(--text-muted)",
                   textTransform: "uppercase",
@@ -277,7 +293,7 @@ export default function PlayerTable({ players }: PlayerTableProps) {
 
                   {/* Rank */}
                   <td style={{ padding: "9px 16px", textAlign: "center", width: 44 }}>
-                    <span style={{ color: isDndPlayer ? "var(--red)" : "var(--teal)", fontWeight: 600, fontSize: 15 }}>
+                    <span style={{ color: isDndPlayer ? "var(--red)" : "var(--teal)", fontWeight: 600, fontSize: 16 }}>
                       {player.rank}
                     </span>
                   </td>
@@ -288,12 +304,12 @@ export default function PlayerTable({ players }: PlayerTableProps) {
                       <NflLogo team={player.team} size={24} />
                       <div>
                         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                          <span style={{ color: isDndPlayer ? "var(--red)" : "#ffffff", fontSize: 15, fontWeight: 700 }}>
+                          <span style={{ color: isDndPlayer ? "var(--red)" : "#ffffff", fontSize: 16, fontWeight: 700 }}>
                             {player.player_name}
                           </span>
                           <span
                             style={{
-                              fontSize: 11,
+                              fontSize: 12,
                               fontWeight: 600,
                               padding: "2px 5px",
                               borderRadius: 3,
@@ -319,7 +335,7 @@ export default function PlayerTable({ players }: PlayerTableProps) {
                             </span>
                           )}
                         </div>
-                        <div style={{ fontSize: 12, color: "#c8cad4", fontWeight: 500, marginTop: 2 }}>
+                        <div style={{ fontSize: 13, color: "#c8cad4", fontWeight: 500, marginTop: 2 }}>
                           {player.team}
                         </div>
                       </div>

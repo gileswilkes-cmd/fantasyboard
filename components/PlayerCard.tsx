@@ -91,7 +91,7 @@ export default function PlayerCard({ player }: PlayerCardProps) {
 
       {/* 1. One-liner */}
       <div style={{ padding: "10px 14px", borderBottom: BORDER }}>
-        <span style={{ fontStyle: "italic", color: "#1D9E75", fontSize: 13 }}>
+        <span style={{ fontStyle: "italic", color: "#1D9E75", fontSize: 14 }}>
           {card
             ? card.one_liner
             : `2025 avg ${player.avg_ppr_2025?.toFixed(1) ?? "—"} pts · ${player.boom_weeks ?? 0} boom weeks · std dev ${player.std_dev?.toFixed(1) ?? "—"} · ${player.bust_weeks ?? 0} bust weeks`
@@ -111,11 +111,11 @@ export default function PlayerCard({ player }: PlayerCardProps) {
               borderRight: i < statBoxes.length - 1 ? BORDER : "none",
             }}
           >
-            <div style={{ fontSize: 16, fontWeight: 600, color: "#ffffff" }}>
+            <div style={{ fontSize: 18, fontWeight: 600, color: "#ffffff" }}>
               {box.value}
             </div>
             <div style={{
-              fontSize: 11,
+              fontSize: 12,
               color: "#7b7f8f",
               textTransform: "uppercase",
               letterSpacing: "0.06em",
@@ -143,7 +143,7 @@ export default function PlayerCard({ player }: PlayerCardProps) {
           {strengths.slice(0, 3).map((s, i) => (
             <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: i < 2 ? 6 : 0 }}>
               <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#1D9E75", flexShrink: 0, marginTop: 5 }} />
-              <span style={{ fontSize: 13, color: card ? "#c8cad4" : "#7b7f8f" }}>{s}</span>
+              <span style={{ fontSize: 14, color: card ? "#c8cad4" : "#7b7f8f" }}>{s}</span>
             </div>
           ))}
         </div>
@@ -161,7 +161,7 @@ export default function PlayerCard({ player }: PlayerCardProps) {
           {weaknesses.slice(0, 3).map((w, i) => (
             <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: i < 2 ? 6 : 0 }}>
               <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#E24B4A", flexShrink: 0, marginTop: 5 }} />
-              <span style={{ fontSize: 13, color: card ? "#c8cad4" : "#7b7f8f" }}>{w}</span>
+              <span style={{ fontSize: 14, color: card ? "#c8cad4" : "#7b7f8f" }}>{w}</span>
             </div>
           ))}
         </div>
@@ -180,7 +180,7 @@ export default function PlayerCard({ player }: PlayerCardProps) {
           }}>
             Comp
           </div>
-          <span style={{ fontSize: 13, color: card ? "#c8cad4" : "#7b7f8f" }}>
+          <span style={{ fontSize: 14, color: card ? "#c8cad4" : "#7b7f8f" }}>
             {card ? card.comp : "Historical comp generated in Session 5"}
           </span>
         </div>
@@ -226,7 +226,7 @@ export default function PlayerCard({ player }: PlayerCardProps) {
         }}>
           {verdictBadge}
         </span>
-        <span style={{ fontSize: 13, color: "#7b7f8f" }}>
+        <span style={{ fontSize: 14, color: "#7b7f8f" }}>
           {card
             ? card.verdict_text
             : `Pick ${player.rank} overall · Proj ${player.projected_pts.toFixed(0)} pts · ADP ${player.adp_rank ?? "—"}`
