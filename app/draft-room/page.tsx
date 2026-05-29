@@ -5,6 +5,7 @@ import TabNav from "@/components/TabNav";
 import { getPlayers } from "@/lib/data";
 import type { Player } from "@/lib/data";
 import { getTier, getTierConfig } from "@/lib/tiers";
+import SeasonSimulator from "@/components/SeasonSimulator";
 
 const NUM_TEAMS = 14;
 
@@ -613,6 +614,20 @@ export default function DraftRoomPage() {
 
   const userRank = teamTotals.findIndex((t) => t.slot === userSlot) + 1;
 
+  // All teams' starters for the season simulator — slot 1 = index 0, slot 14 = index 13
+  const STARTER_IDS = ["QB", "RB1", "RB2", "WR1", "WR2", "TE", "Flex", "K", "DEF"] as const;
+  const allTeamStartersForSim = useMemo(() => {
+    if (phase !== "report") return [];
+    return Array.from({ length: NUM_TEAMS }, (_, i) => {
+      const slot = i + 1;
+      const slotPicks = picks
+        .filter((p, idx) => p != null && getTeamSlot(idx) === slot)
+        .map((p) => p!);
+      const roster = assignToSlots(slotPicks);
+      return STARTER_IDS.map((id) => roster[id]).filter(Boolean) as Player[];
+    });
+  }, [phase, picks]);
+
   const bestValuePick = useMemo(() => {
     if (!userPicks.length) return null;
     const withDelta = userPicks.filter((p) => p.value_delta != null);
@@ -891,6 +906,13 @@ export default function DraftRoomPage() {
               ↓ Download Results
             </button>
           </div>
+
+          {allTeamStartersForSim.length === NUM_TEAMS && (
+            <SeasonSimulator
+              allTeamStarters={allTeamStartersForSim}
+              myTeamIdx={userSlot - 1}
+            />
+          )}
         </div>
       </div>
     );
