@@ -911,6 +911,7 @@ export default function DraftRoomPage() {
             <SeasonSimulator
               allTeamStarters={allTeamStartersForSim}
               myTeamIdx={userSlot - 1}
+              allPlayers={allPlayers}
             />
           )}
         </div>

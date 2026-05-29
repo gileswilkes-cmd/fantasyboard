@@ -3,10 +3,11 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { playoffRate, champRate, avgWins, avgPtsPerWeek, top10PctWins, bot10PctWins } =
+    const { playoffRate, champRate, avgWins, avgPtsPerWeek, top10PctWins, bot10PctWins, difficulty } =
       await req.json() as {
         playoffRate: number; champRate: number; avgWins: number;
         avgPtsPerWeek: number; top10PctWins: number; bot10PctWins: number;
+        difficulty?: string;
       };
 
     const client = new Anthropic();
@@ -15,7 +16,7 @@ export async function POST(req: Request) {
       max_tokens: 100,
       messages: [{
         role: "user",
-        content: `You are a terse fantasy football analyst. A team ran 1000 season simulations:
+        content: `You are a terse fantasy football analyst. A team ran 1000 season simulations against ${difficulty === "competitive" ? "8 VOR-optimal bots (competitive field)" : "standard personality bots"}:
 - Playoff rate: ${(playoffRate * 100).toFixed(1)}%
 - Championship rate: ${(champRate * 100).toFixed(1)}%
 - Avg wins: ${avgWins.toFixed(1)}/17
@@ -23,7 +24,7 @@ export async function POST(req: Request) {
 - Best 10% of seasons: ${top10PctWins.toFixed(1)} avg wins
 - Worst 10% of seasons: ${bot10PctWins.toFixed(1)} avg wins
 
-Write exactly ONE punchy sentence (under 25 words) assessing ceiling, floor, and playoff outlook.`,
+Write exactly ONE punchy sentence (under 25 words) assessing ceiling, floor, and playoff outlook${difficulty === "competitive" ? "; acknowledge the tougher field" : ""}.`,
       }],
     });
 
