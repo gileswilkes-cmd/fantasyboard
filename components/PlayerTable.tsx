@@ -47,12 +47,15 @@ function sortPlayers(
   dir: SortDir,
   tierOverrides: Record<string, number>
 ): Player[] {
-  if (TIER_SORT_KEYS.has(key)) {
+if (TIER_SORT_KEYS.has(key)) {
     return [...players].sort((a, b) => {
       const ta = tierOverrides[a.player_name] ?? getTier(a.vor_score);
       const tb = tierOverrides[b.player_name] ?? getTier(b.vor_score);
       if (ta !== tb) return ta - tb;
-      return (b.vor_score ?? -Infinity) - (a.vor_score ?? -Infinity);
+      if (b.vor_score == null && a.vor_score == null) return 0;
+      if (b.vor_score == null) return 1;
+      if (a.vor_score == null) return -1;
+      return b.vor_score - a.vor_score;
     });
   }
   return [...players].sort((a, b) => {
