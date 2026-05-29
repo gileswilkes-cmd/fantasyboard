@@ -6606,5 +6606,293 @@
     "comp": "Chicago Bears DEF 2022 — similarly mediocre defense drafted on reputation rather than production",
     "verdict_badge": "Avoid",
     "verdict_text": "Zero value delta and chronic busts make DET DEF a wasteful roster spot."
+  },
+  "Seattle Seahawks": {
+    "verdict_badge": "Avoid",
+    "one_liner": "SEA DEF averages just 5 PPR points with a 44% bust rate in 2024.",
+    "strengths": [
+      "Occasional boom upside with at least one 20+ point week in 2024",
+      "Stable year-over-year scoring — 5 pts average held consistent from 2024 to 2025",
+      "No flagged injury or situational risk concerns heading into drafts"
+    ],
+    "weaknesses": [
+      "44% bust rate — busted in 7 of 16 weeks scoring under 10 points",
+      "ADP rank 218 wildly overvalues a unit with VOR rank of 424",
+      "5-point average offers near-zero weekly floor, making streaming alternatives preferable"
+    ],
+    "comp": "Chicago Bears DEF 2022 — overvalued by ADP despite chronic low scoring and high bust frequency",
+    "verdict_text": "Skip entirely; stream a higher-upside DEF off waivers each week instead."
+  },
+  "Cincinnati Bengals": {
+    "one_liner": "CIN DEF averages just 4.9 PPR points with a 44% bust rate — deeply unreliable.",
+    "strengths": [
+      "Consistent year-over-year average suggests a stable floor around 5 points",
+      "One boom week shows upside exists if opponent turnovers spike",
+      "ADP at 220 means you won't spend meaningful draft capital"
+    ],
+    "weaknesses": [
+      "7 of 16 weeks busted under 10 points — bust rate is crippling",
+      "Only one boom week all season, making ceiling nearly nonexistent",
+      "No 2025 data available, adding uncertainty heading into the new year"
+    ],
+    "comp": "Jacksonville Jaguars DEF 2023 — similarly mediocre unit priced as a throwaway streamer with little upside",
+    "verdict_badge": "Avoid",
+    "verdict_text": "Skip entirely; stream a matchup-based defense instead every single week."
+  },
+  "Los Angeles Chargers": {
+    "verdict_badge": "Avoid",
+    "one_liner": "Low-floor streaming option busting 44% of weeks with minimal upside.",
+    "strengths": [
+      "Consistent year-over-year average suggests stable baseline floor",
+      "One boom week shows occasional high-ceiling potential",
+      "ADP likely depressed, available extremely late in drafts"
+    ],
+    "weaknesses": [
+      "Busts in 7 of 16 weeks — nearly half the season is worthless",
+      "4.8 average PPR is well below viable weekly streaming threshold",
+      "No 2025 data available; zero visibility into current unit quality"
+    ],
+    "comp": "Jacksonville Jaguars DEF 2023 — similar mediocre average with chronic bust rate and unpredictable weekly variance",
+    "verdict_text": "Skip entirely; find a higher-floor streaming defense on waiver wire."
+  },
+  "Indianapolis Colts": {
+    "verdict_badge": "Avoid",
+    "one_liner": "IND DEF averages just 4.6 PPR points with a 44% bust rate — not worth rostering.",
+    "strengths": [
+      "Consistent year-over-year scoring average suggests some floor stability",
+      "Low standard deviation of 4.5 indicates predictable if uninspiring output",
+      "Cheap late-round or waiver wire option if desperate for streaming depth"
+    ],
+    "weaknesses": [
+      "44% bust rate (7/16 weeks under 10 pts) makes streaming unreliable",
+      "Only one boom week all season — nearly zero upside ceiling",
+      "VOR rank 427 vs ADP 224 signals massive overvaluation at current draft cost"
+    ],
+    "comp": "Jacksonville Jaguars DEF 2023 — similarly low-floor, low-ceiling defense drafted well above actual fantasy value",
+    "verdict_text": "Skip entirely; far better streaming options exist at this ADP range."
+  },
+  "Miami Dolphins": {
+    "one_liner": "MIA DEF averages a meager 4.5 PPR points with frequent busts and minimal upside.",
+    "strengths": [
+      "Stable floor matches 2024 output, no regression in scoring average",
+      "Occasional boom ceiling exists with at least one 20-point week",
+      "Consistent year-over-year performance suggests predictable range of outcomes"
+    ],
+    "weaknesses": [
+      "44% bust rate makes MIA DEF unreliable as a weekly starter",
+      "Only one boom week in 16 games severely limits upside",
+      "ADP rank 226 vastly overvalues a unit with near-zero VOR contribution"
+    ],
+    "comp": "Jacksonville Jaguars DEF 2023 — similarly middling scoring unit drafted far too early relative to actual production",
+    "verdict_badge": "Avoid",
+    "verdict_text": "Skip entirely; 4.5 PPR average doesn't justify any meaningful draft capital."
+  },
+  "Atlanta Falcons": {
+    "one_liner": "4.4 PPR average with 44% bust rate makes ATL DEF a streaming trap.",
+    "strengths": [
+      "Consistent year-over-year average suggests some floor stability",
+      "One boom week shows upside ceiling exists",
+      "Low ADP means minimal draft capital wasted if dropped"
+    ],
+    "weaknesses": [
+      "7 of 16 weeks under 10 points — chronic bust risk",
+      "VOR rank 229 spots worse than ADP signals significant negative value",
+      "No 2025 data available to assess current roster or scheme changes"
+    ],
+    "comp": "Carolina Panthers DEF 2023 — mediocre average masked by frequent low-scoring duds",
+    "verdict_badge": "Avoid",
+    "verdict_text": "Skip entirely; negative VOR delta and 44% bust rate offer no value."
+  },
+  "Chicago Bears": {
+    "one_liner": "CHI DEF busts 44% of weeks with a 4.3 average — middling and unreliable.",
+    "strengths": [
+      "Consistent year-over-year scoring, averaging 4.3 in both 2024 and 2025",
+      "Low ADP means minimal draft capital required to roster",
+      "Occasional upside with at least one 20-point boom week"
+    ],
+    "weaknesses": [
+      "Busts nearly half of all weeks, scoring under 10 points in 7 of 16 games",
+      "4.3 average PPR is well below useful fantasy thresholds for a starting DEF",
+      "VOR rank of 431 signals significant negative value relative to positional baseline"
+    ],
+    "comp": "Jacksonville Jaguars DEF 2023 — similarly mediocre scoring with chronic bust risk dragging weekly floors",
+    "verdict_badge": "Avoid",
+    "verdict_text": "Skip CHI DEF entirely; bust rate and negative VOR make them unrosterable."
+  },
+  "New York Jets": {
+    "verdict_badge": "Avoid",
+    "one_liner": "Low-floor Jets D averaging 4.3 with 44% bust rate offers minimal fantasy value.",
+    "strengths": [
+      "Consistent year-over-year scoring — 4.3 average held steady from 2024 to 2025",
+      "At least one boom week shows upside ceiling exists",
+      "ADP rank 231 means you aren't paying a premium for them"
+    ],
+    "weaknesses": [
+      "44% bust rate (7/16 weeks under 10 pts) makes them a weekly liability",
+      "4.3 average PPR is well below viable streaming threshold",
+      "VOR rank 432 vs ADP 231 signals significant draft board overvaluation"
+    ],
+    "comp": "Jacksonville Jaguars DEF 2023 — similarly middling scoring defense drafted higher than warranted with chronic bust risk",
+    "verdict_text": "Skip entirely — better streaming options will always be available on waivers."
+  },
+  "New York Giants": {
+    "one_liner": "NYG DEF averages just 4.2 points with a 44% bust rate — deeply unreliable.",
+    "strengths": [
+      "Occasional upside with one 20-point boom week in 2024",
+      "Stable year-over-year average suggesting predictable floor",
+      "Available well past meaningful draft rounds, no draft capital wasted"
+    ],
+    "weaknesses": [
+      "44% bust rate makes weekly starts a liability",
+      "4.2 average PPR score is well below streaming threshold",
+      "VOR rank of 433 signals near-zero fantasy value above replacement"
+    ],
+    "comp": "Jacksonville Jaguars DEF 2023 — similarly low-scoring unit that busted frequently and offered minimal streaming value",
+    "verdict_badge": "Avoid",
+    "verdict_text": "Stream only in emergencies; far better DSP options available at same ADP."
+  },
+  "Jacksonville Jaguars": {
+    "verdict_badge": "Avoid",
+    "one_liner": "Low-floor JAC defense averages just 4.2 PPR points with chronic bust risk.",
+    "strengths": [
+      "Consistent year-over-year scoring — 4.2 average held steady from 2024 to 2025",
+      "One boom week shows ceiling exists if matchups align",
+      "ADP at 233 means you can find equivalent or better options undrafted"
+    ],
+    "weaknesses": [
+      "44% bust rate (7/16 weeks under 10 pts) makes floor nearly unusable",
+      "4.5 std dev on a 4.2 average means variance regularly produces near-zero weeks",
+      "VOR rank of 434 with zero value delta — no positive surplus over replacement"
+    ],
+    "comp": "Cleveland Browns DEF 2023 — similarly mediocre average with high bust frequency and no streaming upside",
+    "verdict_text": "Skip entirely; zero VOR value and better streaming options will always be available."
+  },
+  "New Orleans Saints": {
+    "one_liner": "Low-floor Saints D busts nearly half the time with minimal upside.",
+    "strengths": [
+      "Consistent 4.1 avg held steady year-over-year showing floor stability",
+      "One elite boom week demonstrates occasional high-end ceiling",
+      "Zero risk flags from injury or structural concerns"
+    ],
+    "weaknesses": [
+      "44% bust rate makes reliable weekly starts nearly impossible",
+      "VOR rank 435 signals replacement-level value at best",
+      "ADP 234 reflects late-round desperation, not genuine opportunity"
+    ],
+    "comp": "New Orleans Saints 2023 — same middling output, same high bust frequency, no improvement trajectory",
+    "verdict_badge": "Avoid",
+    "verdict_text": "Skip entirely; bust rate and replacement-level VOR make this a wasteful pick."
+  },
+  "Tampa Bay Buccaneers": {
+    "one_liner": "Mediocre 4.1 PPR average with high bust rate makes TB DEF a liability.",
+    "strengths": [
+      "Consistent year-over-year scoring at 4.1 PPR average",
+      "One boom week shows ceiling exists",
+      "Manageable ADP allows late-round targeting"
+    ],
+    "weaknesses": [
+      "Busts 44% of weeks — nearly half of starts are unusable",
+      "Only one boom week in 16 games limits upside",
+      "4.5 standard deviation signals wildly unpredictable output"
+    ],
+    "comp": "Cleveland DEF 2023 — similarly low floor, rare upside, constant streaming headache",
+    "verdict_badge": "Avoid",
+    "verdict_text": "Skip entirely; bust rate is too high to trust as a starter."
+  },
+  "Houston Texans": {
+    "verdict_badge": "Avoid",
+    "one_liner": "High bust rate and mediocre scoring make HOU DEF a streamer at best.",
+    "strengths": [
+      "Decent pass rush potential with Will Anderson Jr.",
+      "Solid secondary talent with Derek Stingley Jr.",
+      "Competitive AFC South schedule offers some favorable matchups"
+    ],
+    "weaknesses": [
+      "44% bust rate in 2024 with only one boom week all season",
+      "3.9 average PPR score is well below viable weekly starter threshold",
+      "ADP rank 236 severely overvalues actual fantasy production"
+    ],
+    "comp": "Cleveland Browns DEF 2023 — overhyped unit with real talent that consistently underdelivered in fantasy scoring",
+    "verdict_text": "Do not draft — bust risk far outweighs any perceived upside here."
+  },
+  "Washington Commanders": {
+    "one_liner": "Low-floor DST busting 44% of weeks with only one elite score in 2024.",
+    "strengths": [
+      "Consistent year-over-year scoring average signals some baseline reliability",
+      "Access to a young, improving Commanders offense that limits opponent possessions",
+      "Single boom week shows ceiling exists if schedule aligns"
+    ],
+    "weaknesses": [
+      "7 of 16 weeks under 10 points makes streaming unreliable",
+      "3.9 PPR average is well below replacement-level DST production",
+      "ADP of 237 reflects zero real value beyond desperation streaming"
+    ],
+    "comp": "Chicago Bears DEF 2023 — similarly mediocre floor with rare upside spikes that rarely materialized",
+    "verdict_badge": "Avoid",
+    "verdict_text": "Skip entirely; stream a higher-upside DST with better matchup variance."
+  },
+  "Arizona Cardinals": {
+    "verdict_badge": "Avoid",
+    "one_liner": "ARI DEF averages under 4 PPR points with busts nearly half the time.",
+    "strengths": [
+      "Consistent year-over-year scoring stability at 3.8 PPG",
+      "One elite boom week shows ceiling exists",
+      "Low ADP relative to positional scarcity late in drafts"
+    ],
+    "weaknesses": [
+      "7 of 16 weeks scored under 10 points — 44% bust rate",
+      "3.8 average PPR is well below streaming-worthy thresholds",
+      "No 2025 data available to assess offseason changes"
+    ],
+    "comp": "Jacksonville Jaguars DEF 2023 — similarly unreliable unit with middling floor and rare upside",
+    "verdict_text": "Stream only in desperation; far better DSP options exist at every stage."
+  },
+  "Las Vegas Raiders": {
+    "one_liner": "Raiders DEF averages just 3.7 PPR with bust rate over 40% in 2024.",
+    "strengths": [
+      "Consistent year-over-year average holding steady at 3.7",
+      "One elite boom week shows ceiling exists",
+      "Low ADP cost means minimal draft capital wasted"
+    ],
+    "weaknesses": [
+      "7 of 16 weeks scored under 10 points in 2024",
+      "3.7 average is well below viable streaming threshold",
+      "No 2025 data available to indicate improvement"
+    ],
+    "comp": "Jacksonville Jaguars DEF 2023 — similarly low-floor, high-bust unit burning roster spots",
+    "verdict_badge": "Avoid",
+    "verdict_text": "Skip entirely; bust rate and floor make this a roster liability."
+  },
+  "Carolina Panthers": {
+    "verdict_badge": "Avoid",
+    "one_liner": "CAR DEF averages 3.6 points with a 44% bust rate — not worth a roster spot.",
+    "strengths": [
+      "Consistent year-over-year scoring (3.6 in both 2024 and 2025)",
+      "Low ADP means minimal draft capital wasted if rostered",
+      "One boom week shows occasional upside ceiling exists"
+    ],
+    "weaknesses": [
+      "44% bust rate (7/16 weeks under 10 pts) makes streaming unreliable",
+      "3.6 average PPR is bottom-tier production among all DSTs",
+      "VOR rank of 441 signals near-zero fantasy value above replacement"
+    ],
+    "comp": "Cleveland Browns DEF 2023 — similarly bad defense producing garbage-time stats with no fantasy relevance",
+    "verdict_text": "Skip entirely; stream a matchup-based DST on waivers instead."
+  },
+  "Tennessee Titans": {
+    "verdict_badge": "Avoid",
+    "one_liner": "4.4 average with 44% bust rate makes TEN DEF a streaming trap.",
+    "strengths": [
+      "Cheap late-round ADP creates zero draft capital risk if streamed",
+      "Occasional upside proven by one 20+ point explosion in 2024",
+      "Year-over-year consistency at 4.4 avg signals predictable floor for waiver calculus"
+    ],
+    "weaknesses": [
+      "44% bust rate (7/16 weeks under 10 pts) destroys weekly reliability",
+      "Std dev of 4.5 relative to a 4.4 mean signals near-total score volatility",
+      "No 2025 data available — blind roster decision heading into the season"
+    ],
+    "comp": "Jacksonville Jaguars DEF 2023 — low average, high bust frequency, waiver-wire filler only",
+    "verdict_text": "Skip entirely; target a real streamer with a safer weekly floor."
   }
 }

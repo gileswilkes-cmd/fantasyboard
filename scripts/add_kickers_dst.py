@@ -35,12 +35,37 @@ dst_units = [
     {"player_name": "Detroit Lions",         "position": "DEF", "team": "DET", "age": 0, "projected_pts":  88, "vor_score":  8, "adp_rank": 216, "adp": 216.0, "value_delta": 0, "avg_ppr_2025": 5.2, "avg_ppr_2024": 5.0, "std_dev": 4.5, "boom_weeks": 1, "bust_weeks": 7, "risk_flag": None},
 ]
 
+additional_dst = [
+    {"player_name": "Seattle Seahawks",      "position": "DEF", "team": "SEA", "age": 0, "projected_pts": 85, "vor_score": 5, "adp_rank": 218, "adp": 218.0},
+    {"player_name": "Cincinnati Bengals",    "position": "DEF", "team": "CIN", "age": 0, "projected_pts": 83, "vor_score": 4, "adp_rank": 220, "adp": 220.0},
+    {"player_name": "Los Angeles Chargers",  "position": "DEF", "team": "LAC", "age": 0, "projected_pts": 81, "vor_score": 3, "adp_rank": 222, "adp": 222.0},
+    {"player_name": "Indianapolis Colts",    "position": "DEF", "team": "IND", "age": 0, "projected_pts": 79, "vor_score": 2, "adp_rank": 224, "adp": 224.0},
+    {"player_name": "Miami Dolphins",        "position": "DEF", "team": "MIA", "age": 0, "projected_pts": 77, "vor_score": 1, "adp_rank": 226, "adp": 226.0},
+    {"player_name": "Tennessee Titans",      "position": "DEF", "team": "TEN", "age": 0, "projected_pts": 75, "vor_score": 0, "adp_rank": 228, "adp": 228.0},
+    {"player_name": "Atlanta Falcons",       "position": "DEF", "team": "ATL", "age": 0, "projected_pts": 75, "vor_score": 0, "adp_rank": 229, "adp": 229.0},
+    {"player_name": "Chicago Bears",         "position": "DEF", "team": "CHI", "age": 0, "projected_pts": 73, "vor_score": 0, "adp_rank": 230, "adp": 230.0},
+    {"player_name": "New York Jets",         "position": "DEF", "team": "NYJ", "age": 0, "projected_pts": 73, "vor_score": 0, "adp_rank": 231, "adp": 231.0},
+    {"player_name": "New York Giants",       "position": "DEF", "team": "NYG", "age": 0, "projected_pts": 71, "vor_score": 0, "adp_rank": 232, "adp": 232.0},
+    {"player_name": "Jacksonville Jaguars",  "position": "DEF", "team": "JAC", "age": 0, "projected_pts": 71, "vor_score": 0, "adp_rank": 233, "adp": 233.0},
+    {"player_name": "New Orleans Saints",    "position": "DEF", "team": "NO",  "age": 0, "projected_pts": 69, "vor_score": 0, "adp_rank": 234, "adp": 234.0},
+    {"player_name": "Tampa Bay Buccaneers",  "position": "DEF", "team": "TB",  "age": 0, "projected_pts": 69, "vor_score": 0, "adp_rank": 235, "adp": 235.0},
+    {"player_name": "Houston Texans",        "position": "DEF", "team": "HOU", "age": 0, "projected_pts": 67, "vor_score": 0, "adp_rank": 236, "adp": 236.0},
+    {"player_name": "Washington Commanders", "position": "DEF", "team": "WAS", "age": 0, "projected_pts": 67, "vor_score": 0, "adp_rank": 237, "adp": 237.0},
+    {"player_name": "Arizona Cardinals",     "position": "DEF", "team": "ARI", "age": 0, "projected_pts": 65, "vor_score": 0, "adp_rank": 238, "adp": 238.0},
+    {"player_name": "Las Vegas Raiders",     "position": "DEF", "team": "LV",  "age": 0, "projected_pts": 63, "vor_score": 0, "adp_rank": 239, "adp": 239.0},
+    {"player_name": "Carolina Panthers",     "position": "DEF", "team": "CAR", "age": 0, "projected_pts": 61, "vor_score": 0, "adp_rank": 240, "adp": 240.0},
+]
+for e in additional_dst:
+    e.update({"value_delta": 0, "avg_ppr_2025": round(e["projected_pts"] / 17, 1),
+               "avg_ppr_2024": round(e["projected_pts"] / 17, 1),
+               "std_dev": 4.5, "boom_weeks": 1, "bust_weeks": 7, "risk_flag": None})
+
 players = json.loads(players_path.read_text(encoding="utf-8"))
 existing = {p["player_name"] for p in players}
 next_rank = max(p["rank"] for p in players) + 1
 
 added = 0
-for entry in kickers + dst_units:
+for entry in kickers + dst_units + additional_dst:
     if entry["player_name"] in existing:
         print(f"  SKIP {entry['player_name']} — already exists")
         continue
