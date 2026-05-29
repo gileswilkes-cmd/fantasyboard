@@ -16,3 +16,13 @@
  ○ Compiling /board ...
  ✓ Compiled /board in 1688ms (650 modules)
  GET /board 200 in 3481ms
+ ✓ Compiled in 1065ms (249 modules)
+ ✓ Compiled in 824ms (652 modules)
+ ⚠ Found a change in next.config.ts. Restarting the server to apply the changes...
+   ▲ Next.js 15.5.18
+   - Local:        http://localhost:3002
+   - Network:      http://192.168.1.165:3002
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 7.1s

@@ -164,3 +164,12 @@ https://nextjs.org/telemetry
  ✓ Compiled in 187ms (250 modules)
  ✓ Compiled in 184ms (250 modules)
  ✓ Compiled in 391ms (250 modules)
+ ✓ Compiled in 349ms (250 modules)
+ ⚠ Found a change in next.config.ts. Restarting the server to apply the changes...
+   ▲ Next.js 15.5.18
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.165:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 7.2s
