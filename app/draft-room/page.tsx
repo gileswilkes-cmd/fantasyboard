@@ -939,7 +939,7 @@ export default function DraftRoomPage() {
       <div style={{ flex: 1, display: "flex", overflow: "hidden" }}>
 
         {/* ── Left: Available players ──────────────────────────────────────── */}
-        <div style={{ width: "38%", display: "flex", flexDirection: "column", borderRight: "1px solid var(--border)", overflow: "hidden" }}>
+        <div style={{ width: 220, flexShrink: 0, display: "flex", flexDirection: "column", borderRight: "1px solid var(--border)", overflow: "hidden" }}>
           <div style={{ padding: "10px 14px", borderBottom: "1px solid var(--border)", flexShrink: 0 }}>
             <input
               value={searchQuery}
@@ -964,7 +964,7 @@ export default function DraftRoomPage() {
                   borderBottom: "1px solid var(--border)",
                 }}>
                   <span style={{ fontSize: 10, fontWeight: 700, color: POS_COLORS[p.position], width: 24 }}>{p.position}</span>
-                  <span style={{ flex: 1, fontSize: 14, fontWeight: 600, color: "var(--text-primary)" }}>{p.player_name}</span>
+                  <span style={{ flex: 1, fontSize: 13, fontWeight: 600, color: "var(--text-primary)" }}>{p.player_name}</span>
                   <span style={{ fontSize: 11, color: "var(--text-secondary)" }}>{p.team}</span>
                   <button
                     onClick={() => makeUserPick(p)}
@@ -1011,13 +1011,13 @@ export default function DraftRoomPage() {
                             opacity: isDrafted ? 0.25 : isPosBlocked ? 0.4 : 1,
                           }}
                         >
-                          <td style={{ padding: "7px 12px", width: 28 }}>
+                          <td style={{ padding: "5px 8px", width: 26 }}>
                             <span style={{ fontSize: 9, fontWeight: 700, color: POS_COLORS[player.position] }}>
                               {player.position}
                             </span>
                           </td>
-                          <td style={{ padding: "7px 4px" }}>
-                            <div style={{ fontSize: 15, fontWeight: 600, color: isPosBlocked ? "var(--text-muted)" : "var(--text-primary)" }}>
+                          <td style={{ padding: "5px 4px" }}>
+                            <div style={{ fontSize: 13, fontWeight: 600, color: isPosBlocked ? "var(--text-muted)" : "var(--text-primary)" }}>
                               {player.player_name}
                             </div>
                             <div style={{ fontSize: 11, color: "var(--text-secondary)" }}>{player.team}</div>
@@ -1052,33 +1052,38 @@ export default function DraftRoomPage() {
         </div>
 
         {/* ── Center: Draft grid ───────────────────────────────────────────── */}
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+        <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", overflow: "hidden" }}>
           <div style={{ padding: "8px 12px", borderBottom: "1px solid var(--border)", fontSize: 10, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.08em", flexShrink: 0 }}>
             Draft Board
           </div>
           <div style={{ flex: 1, overflowX: "auto", overflowY: "auto" }}>
-            <table style={{ borderCollapse: "collapse", fontSize: 11, tableLayout: "fixed", width: `${30 + NUM_TEAMS * 90}px` }}>
+            <table style={{ borderCollapse: "collapse", fontSize: 11, tableLayout: "fixed", width: "100%", minWidth: `${32 + NUM_TEAMS * 52}px` }}>
+              <colgroup>
+                <col style={{ width: 32 }} />
+                {Array.from({ length: NUM_TEAMS }, (_, i) => (
+                  <col key={i} />
+                ))}
+              </colgroup>
               <thead>
                 <tr style={{ background: "var(--bg-secondary)", position: "sticky", top: 0, zIndex: 2 }}>
                   <th style={{
-                    width: 30, padding: "6px 6px", color: "var(--text-muted)",
+                    padding: "6px 4px", color: "var(--text-muted)",
                     borderBottom: "1px solid var(--border)",
                     position: "sticky", left: 0, zIndex: 3,
-                    background: "var(--bg-secondary)",
+                    background: "var(--bg-secondary)", textAlign: "center",
                   }}>#</th>
                   {Array.from({ length: NUM_TEAMS }, (_, i) => i + 1).map((slot) => {
                     const isUser = slot === userSlot;
                     const bot = BOT_PERSONALITIES[getBotIndex(slot, userSlot)];
                     const code = isUser ? "YOU" : (BOT_CODES[bot?.name ?? ""] ?? "BOT");
                     const fullName = isUser ? "You" : (bot?.name ?? `Bot ${slot}`);
-                    const stickyLeft = isUser ? 30 + (slot - 1) * 90 : undefined;
+                    const youLeft = `calc(32px + ${(userSlot - 1) / NUM_TEAMS} * (100% - 32px))`;
                     return (
                       <th
                         key={slot}
                         title={fullName}
                         style={{
-                          width: 90,
-                          padding: "6px 4px",
+                          padding: "6px 2px",
                           color: isUser ? "var(--teal)" : "var(--text-muted)",
                           fontWeight: isUser ? 700 : 600,
                           borderBottom: "1px solid var(--border)",
@@ -1086,9 +1091,11 @@ export default function DraftRoomPage() {
                           textAlign: "center",
                           fontSize: 11,
                           whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
                           ...(isUser ? {
                             position: "sticky",
-                            left: stickyLeft,
+                            left: youLeft,
                             zIndex: 3,
                             background: "#1a2228",
                           } : {}),
@@ -1106,7 +1113,7 @@ export default function DraftRoomPage() {
                   return (
                     <tr key={round}>
                       <td style={{
-                        padding: "4px 6px", color: "var(--text-muted)", textAlign: "center",
+                        padding: "4px 4px", color: "var(--text-muted)", textAlign: "center",
                         fontSize: 11, borderBottom: "1px solid var(--bg-primary)", fontWeight: 600,
                         position: "sticky", left: 0, zIndex: 1, background: "var(--bg-primary)",
                       }}>
@@ -1118,7 +1125,7 @@ export default function DraftRoomPage() {
                         const player = picks[pIdx];
                         const isCurrent = pIdx === currentPickIndex && phase === "drafting";
                         const isUser = slot === userSlot;
-                        const stickyLeft = isUser ? 30 + (slot - 1) * 90 : undefined;
+                        const youLeft = `calc(32px + ${(userSlot - 1) / NUM_TEAMS} * (100% - 32px))`;
 
                         let bg = "transparent";
                         let border = "1px solid #22252f";
@@ -1130,17 +1137,17 @@ export default function DraftRoomPage() {
                           <td
                             key={slot}
                             style={{
-                              padding: "3px 5px", background: bg, border, verticalAlign: "middle",
-                              width: 90, height: 36,
+                              padding: "3px 4px", background: bg, border, verticalAlign: "middle",
+                              height: 36, overflow: "hidden",
                               ...(isUser ? {
                                 position: "sticky",
-                                left: stickyLeft,
+                                left: youLeft,
                                 zIndex: 1,
                               } : {}),
                             }}
                           >
                             {player ? (
-                              <div>
+                              <div style={{ overflow: "hidden" }}>
                                 <span style={{
                                   fontSize: 9, fontWeight: 700, padding: "1px 3px", borderRadius: 2,
                                   color: POS_COLORS[player.position],
@@ -1149,8 +1156,8 @@ export default function DraftRoomPage() {
                                 }}>
                                   {player.position}
                                 </span>
-                                <span style={{ fontSize: 12, color: isUser ? "var(--teal-light)" : "var(--text-primary)" }}>
-                                  {player.player_name.length > 10 ? player.player_name.slice(0, 10) + "…" : player.player_name}
+                                <span style={{ fontSize: 11, color: isUser ? "var(--teal-light)" : "var(--text-primary)" }}>
+                                  {player.player_name.length > 8 ? player.player_name.slice(0, 8) + "…" : player.player_name}
                                 </span>
                               </div>
                             ) : isCurrent ? (
@@ -1171,7 +1178,7 @@ export default function DraftRoomPage() {
         </div>
 
         {/* ── Right: User's roster ─────────────────────────────────────────── */}
-        <div style={{ width: 220, borderLeft: "1px solid var(--border)", display: "flex", flexDirection: "column", overflow: "hidden", flexShrink: 0 }}>
+        <div style={{ width: 200, flexShrink: 0, borderLeft: "1px solid var(--border)", display: "flex", flexDirection: "column", overflow: "hidden" }}>
           <div style={{ padding: "8px 12px", borderBottom: "1px solid var(--border)", fontSize: 10, fontWeight: 700, color: "var(--teal)", textTransform: "uppercase", letterSpacing: "0.08em", flexShrink: 0 }}>
             Your Roster
           </div>
@@ -1192,15 +1199,15 @@ export default function DraftRoomPage() {
                     border: `1px solid ${player ? "var(--border)" : "#1a1f2e"}`,
                     minHeight: 30,
                   }}>
-                    <span style={{ fontSize: 8, fontWeight: 700, color: slot.starter ? "var(--teal-dim)" : "var(--text-muted)", width: 26, flexShrink: 0 }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: slot.starter ? "var(--teal-dim)" : "var(--text-muted)", width: 30, flexShrink: 0 }}>
                       {slot.label}
                     </span>
                     {player ? (
                       <>
-                        <span style={{ fontSize: 10, fontWeight: 600, color: "var(--text-primary)", flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text-primary)", flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                           {player.player_name}
                         </span>
-                        <span style={{ fontSize: 8, color: POS_COLORS[player.position], flexShrink: 0 }}>{player.position}</span>
+                        <span style={{ fontSize: 10, color: POS_COLORS[player.position], flexShrink: 0 }}>{player.position}</span>
                       </>
                     ) : (
                       <span style={{ fontSize: 9, color: "var(--text-muted)", fontStyle: "italic" }}>—</span>
