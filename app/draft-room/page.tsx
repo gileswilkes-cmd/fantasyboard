@@ -136,8 +136,8 @@ const BOT_PERSONALITIES: Bot[] = [
   {
     name: "TE Ignorer",
     pick(available, _roster, round) {
-      if (round < 13) {
-        const nonTE = available.filter((p) => p.position !== "TE");
+      if (round < 14) {
+        const nonTE = available.filter((p) => p.position !== "TE" && p.position !== "K" && p.position !== "DEF");
         if (nonTE.length) return nonTE[0];
       }
       return available[0];
@@ -157,7 +157,9 @@ const BOT_PERSONALITIES: Bot[] = [
     pick(available, roster, round) {
       if (round >= 6) {
         const have = new Set(roster.map((p) => p.position));
-        const missing = ["QB", "RB", "WR", "TE"].find((pos) => !have.has(pos));
+        const coreNeeds = ["QB", "RB", "WR", "TE"];
+        const lateNeeds = round >= 13 ? ["K", "DEF"] : [];
+        const missing = [...coreNeeds, ...lateNeeds].find((pos) => !have.has(pos));
         if (missing) {
           const posPlayers = available.filter((p) => p.position === missing);
           if (posPlayers.length) return posPlayers[0];

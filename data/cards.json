@@ -6238,5 +6238,373 @@
     "comp": "D'Ernest Johnson 2020 — buried on depth chart with flashes of upside that rarely materialized",
     "verdict_badge": "Avoid",
     "verdict_text": "Do not draft until active and earning carries; pure speculation right now."
+  },
+  "B.Aubrey": {
+    "one_liner": "Reliable Dallas kicker with solid floor but zero upside edge over peers.",
+    "strengths": [
+      "8.5 avg PPR score is a modest year-over-year improvement from 8.1 in 2024",
+      "Low standard deviation of 3.2 signals week-to-week consistency and a dependable floor",
+      "Only 3 bust weeks in 16 games indicates he rarely bottoms out"
+    ],
+    "weaknesses": [
+      "No 2025 weekly data available — all 18 weeks logged as DNP, creating significant uncertainty",
+      "Boom rate of just 2/16 weeks means near-zero ceiling upside compared to elite kickers",
+      "VOR rank of 401 vs ADP of 155 signals he is being drafted at fair value with no surplus"
+    ],
+    "comp": "Greg Zuerlein 2022 — a serviceable veteran kicker with consistent mid-range output and no standout traits",
+    "verdict_badge": "Late round",
+    "verdict_text": "Draft only as a late-round streamer; don't reach past Round 13 for him."
+  },
+  "E.McPherson": {
+    "one_liner": "Reliable mid-tier kicker with consistent production but zero upside ceiling.",
+    "strengths": [
+      "8.1 avg PPR mirrors strong 2024 output, showing year-over-year stability",
+      "Low bust rate of 3/16 weeks under 10 points signals floor reliability",
+      "Std dev of 3.4 indicates one of the more predictable kicker profiles available"
+    ],
+    "weaknesses": [
+      "Boom rate of only 2/16 weeks limits ceiling in kicker-scarce scoring formats",
+      "VOR rank 402 vs ADP 162 signals zero surplus value at current draft cost",
+      "No 2025 weekly data available to confirm current form or role"
+    ],
+    "comp": "Justin Tucker 2022 — dependable floor, drafted at cost, minimal week-winning upside",
+    "verdict_badge": "Late round",
+    "verdict_text": "Draft at ADP only if top kickers are gone; no value edge here."
+  },
+  "J.Tucker": {
+    "one_liner": "Elite accuracy kicker on a high-powered offense, but age risk looms large.",
+    "strengths": [
+      "Consistent 8+ PPR average backed by Baltimore's top-tier red zone offense",
+      "Low standard deviation of 3.1 signals reliable floor week-to-week",
+      "Proven track record as one of the most accurate kickers in NFL history"
+    ],
+    "weaknesses": [
+      "Age risk flags declining reliability and potential mid-season replacement",
+      "Zero 2025 weekly data — all DNP entries offer no current-season signal",
+      "ADP 165 with VOR 403 shows zero surplus value at current draft cost"
+    ],
+    "comp": "Matt Bryant 2019 — aging elite kicker drafted on reputation, missed significant time",
+    "verdict_badge": "Monitor",
+    "verdict_text": "Wait on Tucker; monitor camp and preseason health before committing a pick."
+  },
+  "T.Bass": {
+    "one_liner": "Steady Bills kicker with reliable volume but limited upside and no 2025 data yet.",
+    "strengths": [
+      "Buffalo offense generates consistent scoring opportunities, supporting floor",
+      "7.8 projected average shows modest year-over-year improvement",
+      "Low risk flag indicates no known injury or roster concerns"
+    ],
+    "weaknesses": [
+      "Zero 2025 weekly data makes current-season evaluation impossible",
+      "Only 2 boom weeks in 16 games limits ceiling dramatically",
+      "4 bust weeks in 16 games undermines reliability at a scarce position"
+    ],
+    "comp": "Steven Hauschka 2017 — reliable kicker on a strong offense with capped weekly upside",
+    "verdict_badge": "Late round",
+    "verdict_text": "Grab as your second kicker only if top options are gone."
+  },
+  "H.Butker": {
+    "one_liner": "Consistent KC kicker with solid floor but zero 2025 data available yet.",
+    "strengths": [
+      "Elite offense funnels consistent field goal opportunities",
+      "Low standard deviation signals reliable week-to-week scoring",
+      "Back-to-back seasons averaging ~7.7 PPR points"
+    ],
+    "weaknesses": [
+      "No 2025 game data — all DNP entries, status unknown",
+      "ADP 170 reflects zero value delta over position baseline",
+      "25% bust rate limits upside in tight weekly matchups"
+    ],
+    "comp": "Evan McPherson 2023 — high-quality offense, dependable floor, but injury/availability clouds early-round kicker calculus",
+    "verdict_badge": "Monitor",
+    "verdict_text": "Verify availability before drafting; talent is real but 2025 status unconfirmed."
+  },
+  "E.Wolf": {
+    "one_liner": "Replacement-level kicker with no 2025 data; ADP severely overvalues his upside.",
+    "strengths": [
+      "Stable GB offense provides consistent field goal opportunities",
+      "Modest year-over-year scoring improvement from 7.0 to 7.4 avg",
+      "No injury or suspension risk flags heading into drafts"
+    ],
+    "weaknesses": [
+      "Zero 2025 weekly data makes projection entirely speculative",
+      "Only 1 boom week in 16 games undercuts ceiling dramatically",
+      "VOR rank of 406 versus ADP of 175 signals massive overdraft risk"
+    ],
+    "comp": "Mason Crosby 2021 — aging incumbent kicker with bloated ADP relative to replaceable production",
+    "verdict_badge": "Avoid",
+    "verdict_text": "Skip entirely; equivalent kickers will be available undrafted or on waivers."
+  },
+  "C.Boswell": {
+    "one_liner": "Steady mid-tier kicker with minimal upside and zero 2025 data available.",
+    "strengths": [
+      "Consistent year-over-year scoring (7.2 vs 7.4 avg) signals reliable floor",
+      "Pittsburgh offense generates solid FG opportunities in low-scoring games",
+      "No risk flags indicating injury or job security concerns"
+    ],
+    "weaknesses": [
+      "Only 1 boom week in 16 — limited ceiling for a late streamer",
+      "25% bust rate undermines his reputation as a safe floor option",
+      "Zero 2025 weekly data makes current-season projection a blind spot"
+    ],
+    "comp": "Jason Myers 2022 — dependable volume kicker with capped weekly upside",
+    "verdict_badge": "Late round",
+    "verdict_text": "Draft as your kicker in final rounds, don't reach past pick 178."
+  },
+  "W.Lutz": {
+    "one_liner": "Replacement-level kicker with no 2025 data and zero surplus value at ADP.",
+    "strengths": [
+      "Consistent mid-tier production averaging ~7 pts over two seasons",
+      "No injury risk flags currently noted",
+      "Denver offense can generate field goal opportunities"
+    ],
+    "weaknesses": [
+      "Zero 2025 weekly data — completely unverifiable current form",
+      "VOR rank 408 vs ADP 180 signals significant overdraft risk",
+      "Low boom rate (1/16) with 25% bust rate limits upside"
+    ],
+    "comp": "Greg Zuerlein 2022 — aging kicker drafted mid-rounds who returned pedestrian value",
+    "verdict_badge": "Avoid",
+    "verdict_text": "Skip entirely — no value at ADP and no 2025 evidence to justify a pick."
+  },
+  "G.Gano": {
+    "one_liner": "Gano has gone DNP all 2025 — do not roster until healthy and active.",
+    "strengths": [
+      "Proven NFL veteran with multi-season fantasy viability when healthy",
+      "Plays for NYG which can produce field goal opportunities",
+      "Low ADP means zero draft capital risk if speculating"
+    ],
+    "weaknesses": [
+      "Zero 2025 appearances — entirely inactive this season",
+      "Age risk flags declining reliability and injury vulnerability",
+      "High bust rate with only 1 boom week in 16 career tracked games"
+    ],
+    "comp": "Blair Walsh 2017 — aging kicker with injury/availability concerns rendering him undraftable mid-season",
+    "verdict_badge": "Avoid",
+    "verdict_text": "Do not draft Gano until he returns to active roster and plays a game."
+  },
+  "San Francisco 49ers": {
+    "verdict_badge": "Late round",
+    "one_liner": "Middling DST averaging 7.1 PPR with no 2025 data and zero surplus value.",
+    "strengths": [
+      "Slight year-over-year scoring improvement from 6.8 to 7.1 avg",
+      "Three boom weeks (20+ pts) shows occasional ceiling upside",
+      "Elite pass rush talent retained heading into 2025"
+    ],
+    "weaknesses": [
+      "Zero 2025 weekly data — all DNP, no current performance signal",
+      "25% bust rate with four sub-10 point weeks in 2024",
+      "VOR rank 410 vs ADP 190 indicates significant market overvaluation"
+    ],
+    "comp": "Los Angeles Rams DST 2023 — similarly hyped brand-name defense that delivered middling fantasy returns",
+    "verdict_text": "Target only in final rounds; no value edge over ADP warrants earlier investment."
+  },
+  "Baltimore Ravens": {
+    "one_liner": "Middling defense with no 2025 data yet and minimal value over replacement.",
+    "strengths": [
+      "Established Ravens defense with historically solid pass rush",
+      "3 boom weeks in 2024 shows upside ceiling exists",
+      "Low standard deviation of 4 indicates relative week-to-week consistency"
+    ],
+    "weaknesses": [
+      "Zero 2025 weekly data makes current-season projection unreliable",
+      "6.9 avg PPR is below-average DEF scoring for a startable unit",
+      "ADP of 192 far outpaces VOR rank of 411 — severely overvalued"
+    ],
+    "comp": "Cleveland Browns DEF 2023 — hyped name brand defense drafted too early with underwhelming fantasy returns",
+    "verdict_badge": "Avoid",
+    "verdict_text": "No 2025 data and negative VOR value; let another drafter reach here."
+  },
+  "Dallas Cowboys": {
+    "verdict_badge": "Late round",
+    "one_liner": "Mediocre 6.8 PPR average with bust risk makes Dallas a streaming-only option.",
+    "strengths": [
+      "Modest year-over-year scoring improvement from 6.5 to 6.8 average",
+      "3 boom weeks of 20+ points shows upside ceiling exists",
+      "ADP at 194 reflects low draft capital cost"
+    ],
+    "weaknesses": [
+      "4 bust weeks under 10 points in 16 games is a 25% bust rate",
+      "6.8 average PPR is well below viable weekly starter threshold",
+      "No 2025 game data available to confirm any trend continuation"
+    ],
+    "comp": "Chicago Bears DEF 2022 — inconsistent weekly output with fleeting upside masking a mediocre floor",
+    "verdict_text": "Stream only in desperation; target higher-upside DSTs before Dallas in drafts."
+  },
+  "Buffalo Bills": {
+    "one_liner": "Middling defense with boom-or-bust volatility and no ADP value edge whatsoever.",
+    "strengths": [
+      "Consistent year-over-year scoring (6.4 to 6.6 avg) shows stable baseline output",
+      "Two boom weeks demonstrate ceiling exists for streaming upside",
+      "Bills elite offense limits opponent possessions, boosting defensive scoring chances"
+    ],
+    "weaknesses": [
+      "5 of 16 weeks under 10 points makes reliability a serious concern",
+      "6.6 avg PPR is well below top-tier DEF thresholds, limiting ceiling",
+      "ADP of 196 reflects zero value over replacement — no draft equity gain"
+    ],
+    "comp": "Jacksonville Jaguars DEF 2023 — similarly average unit drafted on name recognition rather than production",
+    "verdict_badge": "Avoid",
+    "verdict_text": "Skip entirely; zero VOR advantage and too many bust weeks to roster."
+  },
+  "Cleveland Browns": {
+    "verdict_badge": "Avoid",
+    "one_liner": "Low-floor Browns defense with more busts than booms and zero 2025 data.",
+    "strengths": [
+      "Myles Garrett pass-rush threat can generate sack and turnover upside",
+      "ADP in the 190s suggests late-round cost with minimal draft capital at risk",
+      "Historical 6.8 avg in 2024 shows baseline streaming viability"
+    ],
+    "weaknesses": [
+      "31% bust rate in 2024 with only 12.5% boom rate — deeply unreliable",
+      "Zero 2025 weekly data makes current evaluation entirely speculative",
+      "VOR rank of 414 vs ADP 198 signals significant negative value gap"
+    ],
+    "comp": "Jacksonville Jaguars DEF 2023 — middling defense with sporadic upside that disappointed consistent streamers",
+    "verdict_text": "Skip entirely; far better streaming options available at same or cheaper cost."
+  },
+  "Pittsburgh Steelers": {
+    "verdict_badge": "Late round",
+    "one_liner": "Low-floor PIT defense offers little upside at current ADP pricing.",
+    "strengths": [
+      "Steelers defense historically generates turnovers and sacks in bunches",
+      "Consistent year-over-year scoring suggests a stable base floor around 6 points",
+      "Low ADP risk means minimal draft capital lost if streamed or dropped"
+    ],
+    "weaknesses": [
+      "31% bust rate makes weekly reliability a serious concern",
+      "Only 2 boom weeks in 16 games — elite upside is essentially absent",
+      "No 2025 data available; all projections rely entirely on 2024 extrapolation"
+    ],
+    "comp": "Chicago Bears DEF 2022 — middling unit with occasional flashes but chronic boom scarcity",
+    "verdict_text": "Stream only; don't roster long-term when better matchup options exist."
+  },
+  "New England Patriots": {
+    "verdict_badge": "Avoid",
+    "one_liner": "NE defense averages just 6.2 PPR points with a 31% bust rate.",
+    "strengths": [
+      "Slight year-over-year scoring improvement from 5.9 to 6.2 PPG",
+      "Two boom weeks show occasional upside against weak offenses",
+      "No injury or suspension risk flags to monitor"
+    ],
+    "weaknesses": [
+      "31% bust rate (5/16 weeks under 10 pts) makes streaming unreliable",
+      "6.2 average PPG is bottom-tier among startable defenses",
+      "ADP rank 202 drastically overvalues a unit with zero VOR contribution"
+    ],
+    "comp": "Jacksonville Jaguars DEF 2023 — similarly overhyped defense that cratered as a roster drain",
+    "verdict_text": "Skip entirely; zero VOR means better options exist at every draft stage."
+  },
+  "Los Angeles Rams": {
+    "one_liner": "Mediocre 6.1 PPR average with bust risk outweighing upside at current ADP.",
+    "strengths": [
+      "Slight year-over-year scoring improvement from 5.8 to 6.1 PPR",
+      "Pass-rush talent with Aaron Donald-era holdovers still present",
+      "Occasional ceiling games demonstrated by 2 boom weeks"
+    ],
+    "weaknesses": [
+      "Busts 37.5% of weeks, making floor extremely unreliable",
+      "6.1 average is well below streaming-viable threshold",
+      "ADP 204 is severely overpriced for a low-floor streaming option"
+    ],
+    "comp": "Arizona Cardinals DEF 2022 — similarly middling unit drafted on name recognition over production",
+    "verdict_badge": "Avoid",
+    "verdict_text": "Skip entirely; bust rate and weak average make LAR DEF unrosterable."
+  },
+  "Minnesota Vikings": {
+    "verdict_badge": "Late round",
+    "one_liner": "Low-ceiling Vikings D averaging under 6 PPR points with frequent bust weeks.",
+    "strengths": [
+      "Stable year-over-year scoring (6.1 to 5.9) suggests predictable floor",
+      "Two boom weeks show occasional upside when matchups align",
+      "No flagged injury or situational risk factors"
+    ],
+    "weaknesses": [
+      "6 of 16 weeks scored under 10 points — bust rate is too high to trust",
+      "5.9 avg PPR is well below streaming-worthy threshold for consistent starts",
+      "Zero value delta at ADP 206 means you're paying fair price for a mediocre unit"
+    ],
+    "comp": "Cincinnati Bengals DEF 2023 — similarly middling unit that disappointed streamers all season",
+    "verdict_text": "Stream only in desperation; target in final rounds or not at all."
+  },
+  "Denver Broncos": {
+    "verdict_badge": "Avoid",
+    "one_liner": "Low-floor DEF busting 38% of weeks with near-zero upside worth avoiding.",
+    "strengths": [
+      "Slight year-over-year scoring improvement from 5.6 to 5.8 average PPG",
+      "No current risk flags in player profile",
+      "ADP of 208 reflects low draft cost, limiting roster opportunity cost"
+    ],
+    "weaknesses": [
+      "Busts in 6 of 16 weeks (38%), making reliable starts nearly impossible",
+      "Only 1 boom week all season — virtually no ceiling to chase",
+      "Standard deviation of 4.5 signals wild, unpredictable weekly output"
+    ],
+    "comp": "Cleveland Browns DEF 2023 — high bust rate and minimal upside made them a streaming liability all season",
+    "verdict_text": "Skip entirely; bust rate and zero boom equity make better streamers available."
+  },
+  "Green Bay Packers": {
+    "one_liner": "Low-floor GB defense busting 38% of weeks with minimal upside.",
+    "strengths": [
+      "Consistent mid-range floor near 5-6 PPR points weekly",
+      "Slight year-over-year scoring improvement from 2024 to 2025",
+      "No injury or suspension risk flags to worry about"
+    ],
+    "weaknesses": [
+      "Bust rate of 37.5% makes reliable weekly streaming difficult",
+      "Only one boom week all season severely limits ceiling plays",
+      "ADP at 210 far outpaces VOR rank of 420 — overvalued"
+    ],
+    "comp": "Chicago Bears DEF 2022 — similarly mediocre unit drafted on name recognition over production",
+    "verdict_badge": "Avoid",
+    "verdict_text": "Skip entirely; bust rate and VOR gap make better streaming options available."
+  },
+  "Kansas City Chiefs": {
+    "verdict_badge": "Late round",
+    "one_liner": "KC DEF busts 44% of weeks despite elite team talent around them.",
+    "strengths": [
+      "Elite surrounding roster generates turnover and scoring opportunities",
+      "Patrick Mahomes-led offense keeps games competitive, limiting garbage-time blowouts against KC",
+      "Strong pass rush potential with proven playoff-caliber unit"
+    ],
+    "weaknesses": [
+      "Busted in 7 of 16 weeks in 2024 — deeply unreliable floor",
+      "ADP rank 212 massively overvalues unit relative to VOR rank 421",
+      "Declining average from 5.8 to 5.4 suggests regression trend"
+    ],
+    "comp": "Buffalo Bills DEF 2022 — hyped name-brand defense that disappointed fantasy managers despite real-world success",
+    "verdict_text": "Stream only in favorable matchups; never roster as a weekly starter."
+  },
+  "Philadelphia Eagles": {
+    "one_liner": "Bust-heavy DEF averaging 5.3 PPR with ADP wildly overvalued versus production.",
+    "strengths": [
+      "Solid pass rush with elite talent like Haason Reddick replacements",
+      "Quality secondary capable of generating turnovers",
+      "Strong coaching staff historically maximizes defensive scoring upside"
+    ],
+    "weaknesses": [
+      "Busts in 7 of 16 weeks — nearly 44% bust rate is alarming",
+      "Only 1 boom week all season; ceiling is severely capped",
+      "5.3 average PPG is well below streaming-worthy DEF thresholds"
+    ],
+    "comp": "Chicago Bears DEF 2022 — overhyped defense with name recognition masking mediocre fantasy output",
+    "verdict_badge": "Avoid",
+    "verdict_text": "Skip entirely; bust rate and low floor make better streaming options available."
+  },
+  "Detroit Lions": {
+    "one_liner": "High-bust, low-upside defense averaging just 5.2 PPR with minimal boom potential.",
+    "strengths": [
+      "Slight year-over-year scoring improvement from 5.0 to 5.2",
+      "No specific risk flags raised",
+      "Stable floor relative to boom-bust variance"
+    ],
+    "weaknesses": [
+      "43.75% bust rate — nearly half of weeks score under 10 points",
+      "Only 1 boom week in 16 games limits ceiling",
+      "ADP rank 216 vs VOR rank 423 signals severe overdraft risk"
+    ],
+    "comp": "Chicago Bears DEF 2022 — similarly mediocre defense drafted on reputation rather than production",
+    "verdict_badge": "Avoid",
+    "verdict_text": "Zero value delta and chronic busts make DET DEF a wasteful roster spot."
   }
 }
